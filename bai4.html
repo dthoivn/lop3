@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>🎮 Game kiểm tra – Làm việc với máy tính (Lớp 4)</title>
+<style>
+body{margin:0;font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#74b9ff,#81ecec)}
+#app{max-width:1200px;margin:20px auto;background:#fff;border-radius:18px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+h1{text-align:center;color:#2d3436}
+#top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+#progress{flex:1;height:12px;background:#dfe6e9;border-radius:10px;overflow:hidden;margin:0 15px}
+#bar{height:100%;width:0%;background:linear-gradient(90deg,#ffeaa7,#00b894);transition:.4s}
+#timer{font-weight:bold;color:#d63031}
+.question{font-size:20px;margin:20px 0}
+.answers button{display:block;width:100%;margin:10px 0;padding:12px;border:none;border-radius:14px;font-size:16px;cursor:pointer;background:#f1f2f6;transition:.25s}
+.answers button:hover{background:#dff9fb;transform:scale(1.02)}
+.correct{background:#c8e6c9 !important}
+.wrong{background:#ffcdd2 !important}
+#next{display:none;margin:20px auto;padding:10px 40px;font-size:16px;border:none;border-radius:20px;background:#0984e3;color:#fff;cursor:pointer}
+#result{display:none;text-align:center;font-size:22px}
+#report{display:none;margin-top:20px}
+#report table{width:100%;border-collapse:collapse}
+#report th,#report td{border:1px solid #ccc;padding:6px;text-align:center}
+</style>
+</head>
+<body>
+<div id="app">
+<h1>🎮 GAME KIỂM TRA – LÀM VIỆC VỚI MÁY TÍNH (LỚP 4)</h1>
+<div id="top">
+  <div id="timer">⏱️ 15:00</div>
+  <div id="progress"><div id="bar"></div></div>
+</div>
+<div id="quiz">
+  <div class="question" id="question"></div>
+  <div class="answers" id="answers"></div>
+</div>
+<button id="next">Câu tiếp theo ▶</button>
+<div id="result"></div>
+<div id="report"></div>
+</div>
+<script>
+// ====== 70 CÂU KHÔNG TRÙNG – LÀM VIỆC VỚI MÁY TÍNH ======
+const questions=[
+{q:"Bước đầu tiên để khởi động máy tính là gì?",a:["Bật nút nguồn","Mở phần mềm","Tắt màn hình","Rút điện"],c:0},
+{q:"Sau khi bật nút nguồn thân máy, em cần làm gì tiếp?",a:["Đợi máy khởi động","Tắt máy","Mở Paint","Nhấn giữ nút nguồn"],c:0},
+{q:"Chuột máy tính có mấy nút chính?",a:["1","2","3","4"],c:2},
+{q:"Nút nào dùng để chọn đối tượng?",a:["Nút trái","Nút phải","Nút cuộn","Không nút nào"],c:0},
+{q:"Nút nào thường dùng để mở menu lệnh?",a:["Nút trái","Nút phải","Nút cuộn","Cả ba"],c:1},
+{q:"Chuột nên được đặt ở đâu?",a:["Bên phải bàn phím trên mặt phẳng","Trên bàn phím","Trên màn hình","Bên trái bàn phím"],c:0},
+{q:"Cách cầm chuột đúng là gì?",a:["Tay phải cầm chuột","Tay trái cầm chuột","Cầm hai tay","Không cần cầm"],c:0},
+{q:"Ngón trỏ đặt ở đâu khi cầm chuột đúng?",a:["Nút trái","Nút phải","Nút cuộn","Thân chuột"],c:0},
+{q:"Thao tác nháy đúp chuột dùng để làm gì?",a:["Mở đối tượng","Xóa","Đổi tên","Di chuyển"],c:0},
+{q:"Kéo thả chuột là thao tác như thế nào?",a:["Giữ và di chuyển chuột","Nháy phải","Nháy đúp","Không dùng chuột"],c:0},
+
+{q:"Trước khi tắt máy tính cần làm gì?",a:["Đóng các phần mềm","Rút điện","Nhấn giữ nút nguồn","Tắt màn hình"],c:0},
+{q:"Bước đúng để tắt máy là gì?",a:["Start → Power → Shut down","Power → Start","Rút điện","Nhấn giữ nút nguồn"],c:0},
+{q:"Vì sao không nên tắt máy bằng cách ngắt điện đột ngột?",a:["Mất dữ liệu và hỏng máy","Nhanh hơn","Đỡ tốn điện","Không sao"],c:0},
+{q:"Tư thế ngồi đúng khi dùng máy tính là gì?",a:["Ngồi thẳng lưng","Cúi sát màn hình","Nằm","Đứng"],c:0},
+{q:"Mắt nên cách màn hình khoảng bao nhiêu?",a:["Khoảng 50–70 cm","Rất gần","Sát màn hình","Không cần"],c:0},
+{q:"Không nên làm việc với máy tính liên tục quá bao nhiêu phút?",a:["30 phút","5 phút","60 phút","90 phút"],c:0},
+{q:"Ánh sáng chiếu trực tiếp vào màn hình gây điều gì?",a:["Chói và mỏi mắt","Đẹp hơn","Không ảnh hưởng","Máy nhanh"],c:0},
+{q:"Không nên dùng tay ướt để làm gì?",a:["Chạm vào máy tính","Gõ phím","Cầm chuột","Cả A,B,C"],c:3},
+{q:"Không nên để gì gần máy tính?",a:["Đồ ăn, nước uống","Sách","Vở","Bút"],c:0},
+{q:"Dẫm lên dây điện có thể gây gì?",a:["Nguy hiểm","Không sao","Máy nhanh","Đẹp hơn"],c:0},
+
+{q:"Lau máy tính bằng khăn ướt có an toàn không?",a:["Không","Có","Tùy lúc","Không biết"],c:0},
+{q:"Dây điện bị hở cần làm gì?",a:["Báo người lớn","Tự sửa","Mặc kệ","Chạm thử"],c:0},
+{q:"Vừa sạc vừa dùng điện thoại có thể gây gì?",a:["Nguy hiểm","An toàn","Không sao","Pin lâu hơn"],c:0},
+{q:"Ngồi sai tư thế lâu dài gây hại gì?",a:["Mắt và cột sống","Không hại","Chỉ mỏi tay","Không biết"],c:0},
+{q:"Thao tác di chuyển chuột có tác dụng gì?",a:["Di chuyển con trỏ","Xóa","Mở","Đóng"],c:0},
+{q:"Nút cuộn chuột dùng để làm gì?",a:["Cuộn trang","Mở","Xóa","Đổi tên"],c:0},
+{q:"Nháy chuột phải thường dùng để làm gì?",a:["Mở menu","Mở tệp","Xóa","Đóng"],c:0},
+{q:"Cầm chuột bằng tay trái là đúng hay sai?",a:["Sai","Đúng","Tùy người","Không biết"],c:0},
+{q:"Ngón giữa khi cầm chuột đặt ở đâu?",a:["Nút phải","Nút trái","Nút cuộn","Không đặt"],c:0},
+{q:"Máy tính nên được đặt ở đâu?",a:["Nơi khô ráo, an toàn","Nơi ẩm ướt","Gần nước","Ngoài trời"],c:0},
+
+{q:"Thực hiện đúng quy tắc an toàn giúp điều gì?",a:["Bảo vệ sức khỏe","Tránh tai nạn","Giữ máy bền","Tất cả đều đúng"],c:3},
+{q:"Tắt máy đúng cách giúp điều gì?",a:["Tránh hư hỏng","Mất dữ liệu","Máy chậm","Không ảnh hưởng"],c:0},
+{q:"Nút Start thường nằm ở đâu?",a:["Góc dưới màn hình","Giữa màn hình","Trên bàn phím","Sau máy"],c:0},
+{q:"Sau khi tắt máy, cần làm gì với màn hình?",a:["Tắt nguồn màn hình","Rút dây","Mở lại","Không cần"],c:0},
+{q:"Phần mềm Paint dùng để làm gì?",a:["Vẽ hình","Nghe nhạc","Soạn thảo","Chơi game"],c:0},
+{q:"Kéo thả trong Paint giúp làm gì?",a:["Vẽ hình","Xóa","Lưu","In"],c:0},
+{q:"Đóng Paint trước khi tắt máy là việc nên hay không?",a:["Nên","Không cần","Sai","Không biết"],c:0},
+{q:"Đặt chuột cần lưu ý điều gì?",a:["Đủ không gian di chuyển","Sát tường","Trên vở","Trên màn hình"],c:0},
+{q:"Cổ tay khi cầm chuột nên như thế nào?",a:["Thẳng","Cong","Gập","Nghiêng"],c:0},
+
+{q:"Nháy chuột là thao tác gì?",a:["Nhấn và thả nhanh nút chuột","Giữ lâu","Kéo","Không dùng"],c:0},
+{q:"Nháy đúp chuột là gì?",a:["Nháy nhanh hai lần","Nháy một lần","Giữ lâu","Không biết"],c:0},
+{q:"Tư thế ngồi sai có thể gây đau ở đâu?",a:["Cổ, vai, tay","Chân","Không đau","Không biết"],c:0},
+{q:"Không nên đứng khi làm việc với máy tính vì sao?",a:["Không đúng tư thế","Nhanh mỏi","Không an toàn","Tất cả"],c:3},
+{q:"Thực hiện an toàn về điện là việc của ai?",a:["Mọi người","Chỉ người lớn","Chỉ học sinh","Không ai"],c:0},
+{q:"Khi thấy nguy hiểm về điện, em nên làm gì?",a:["Báo người lớn","Tự xử lí","Chạm thử","Bỏ qua"],c:0},
+{q:"Ngồi quá gần màn hình có thể gây gì?",a:["Cận thị","Không sao","Đẹp hơn","Không biết"],c:0},
+{q:"Tư thế đúng giúp điều gì?",a:["Bảo vệ sức khỏe","Học tốt hơn","Thoải mái","Tất cả"],c:3},
+{q:"Bài học này giúp em làm được gì?",a:["Làm việc an toàn với máy tính","Khởi động và tắt máy đúng","Sử dụng chuột đúng","Tất cả"],c:3},
+{q:"Mục tiêu chính của bài học là gì?",a:["Biết làm việc đúng cách với máy tính","Chơi game","Vẽ","Nghe nhạc"],c:0}
+];
+
+// TRỘN CÂU HỎI
+questions.sort(()=>Math.random()-0.5);
+let index=0,score=0;let details=[];
+const qEl=document.getElementById('question');
+const aEl=document.getElementById('answers');
+const bar=document.getElementById('bar');
+const next=document.getElementById('next');
+const result=document.getElementById('result');
+const report=document.getElementById('report');
+
+// ĐẾM NGƯỢC 15 PHÚT
+let total=15*60;const timerEl=document.getElementById('timer');
+const countdown=setInterval(()=>{total--;let m=Math.floor(total/60),s=total%60;timerEl.textContent=`⏱️ ${m}:${s.toString().padStart(2,'0')}`;if(total<=0){clearInterval(countdown);finish();}},1000);
+
+function shuffle(arr){return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]);}
+function load(){next.style.display='none';const q=questions[index];qEl.textContent=`Câu ${index+1}: ${q.q}`;aEl.innerHTML='';const answers=shuffle(q.a.map((t,i)=>({t,i})));answers.forEach(obj=>{const b=document.createElement('button');b.textContent=obj.t;b.onclick=()=>choose(b,obj.i,q.c,q.q,obj.t);aEl.appendChild(b)});bar.style.width=(index/questions.length*100)+'%';}
+function choose(btn,choice,correct,qtext,ans){[...aEl.children].forEach(b=>b.disabled=true);const ok=choice===correct;btn.classList.add(ok?'correct':'wrong');if(!ok){[...aEl.children].find(b=>b.textContent===questions[index].a[correct]).classList.add('correct');}if(ok)score++;details.push({q:qtext,choose:ans,correct:questions[index].a[correct],ok});next.style.display='block';}
+next.onclick=()=>{index++;if(index<questions.length)load();else finish();};
+function finish(){clearInterval(countdown);document.getElementById('quiz').style.display='none';next.style.display='none';bar.style.width='100%';result.style.display='block';result.innerHTML=`🎉 Hoàn thành!<br>Điểm: <b>${score}/${questions.length}</b>`;report.style.display='block';let html='<h3>📊 BÁO CÁO CHI TIẾT</h3><table><tr><th>Câu</th><th>Đáp án HS</th><th>Đáp án đúng</th><th>Kết quả</th></tr>';details.forEach((d,i)=>{html+=`<tr><td>${i+1}</td><td>${d.choose}</td><td>${d.correct}</td><td>${d.ok?'✔':'✘'}</td></tr>`});html+='</table>';report.innerHTML=html;}
+load();
+</script>
+</body>
+</html>

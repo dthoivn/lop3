@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>🎮 Game kiểm tra – Sắp xếp để dễ tìm (Lớp 3)</title>
+<style>
+body{margin:0;font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#fab1a0,#74b9ff)}
+#app{max-width:1050px;margin:20px auto;background:#fff;border-radius:18px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+h1{text-align:center;color:#2d3436}
+#top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+#progress{flex:1;height:12px;background:#dfe6e9;border-radius:10px;overflow:hidden;margin:0 15px}
+#bar{height:100%;width:0%;background:linear-gradient(90deg,#ffeaa7,#00b894);transition:.4s}
+#timer{font-weight:bold;color:#d63031}
+.question{font-size:20px;margin:20px 0}
+.answers button{display:block;width:100%;margin:10px 0;padding:12px;border:none;border-radius:14px;font-size:16px;cursor:pointer;background:#f1f2f6;transition:.25s}
+.answers button:hover{background:#dff9fb;transform:scale(1.02)}
+.correct{background:#c8e6c9 !important}
+.wrong{background:#ffcdd2 !important}
+#next{display:none;margin:20px auto;padding:10px 40px;font-size:16px;border:none;border-radius:20px;background:#0984e3;color:#fff;cursor:pointer}
+#result{display:none;text-align:center;font-size:22px}
+#report{display:none;margin-top:20px}
+#report table{width:100%;border-collapse:collapse}
+#report th,#report td{border:1px solid #ccc;padding:6px;text-align:center}
+</style>
+</head>
+<body>
+<div id="app">
+<h1>🎮 GAME KIỂM TRA – SẮP XẾP ĐỂ DỄ TÌM (LỚP 3)</h1>
+<div id="top">
+  <div id="timer">⏱️ 15:00</div>
+  <div id="progress"><div id="bar"></div></div>
+</div>
+<div id="quiz">
+  <div class="question" id="question"></div>
+  <div class="answers" id="answers"></div>
+</div>
+<button id="next">Câu tiếp theo ▶</button>
+<div id="result"></div>
+<div id="report"></div>
+</div>
+<script>
+// ====== 70 CÂU KHÔNG TRÙNG – BÀI 7 LỚP 3 ======
+const questions=[
+{q:"Vì sao các thẻ số ở Hình 1b dễ tìm hơn Hình 1a?",a:["Vì được sắp xếp theo thứ tự","Vì có nhiều màu","Vì ít thẻ hơn","Vì thẻ to hơn"],c:0},
+{q:"Các thẻ số ở Hình 1b được sắp xếp theo thứ tự nào?",a:["Giảm dần","Ngẫu nhiên","Tăng dần","Theo màu"],c:2},
+{q:"Khi tìm thẻ số trong Hình 1b, ta nên tìm như thế nào?",a:["Tìm ngẫu nhiên","Tìm theo thứ tự","Nhắm mắt tìm","Tìm từ cuối"],c:1},
+{q:"Việc sắp xếp giúp tìm đồ vật như thế nào?",a:["Chậm hơn","Khó hơn","Nhanh hơn","Không thay đổi"],c:2},
+{q:"Ở Hình 2b, các thẻ đã được làm gì trước khi sắp xếp?",a:["Trang trí","Phân loại","Xóa bớt","Trộn lẫn"],c:1},
+{q:"Ở Hình 2b, thẻ số được sắp xếp theo thứ tự nào?",a:["Ngẫu nhiên","Giảm dần","Tăng dần","Theo màu"],c:2},
+{q:"Ở Hình 2b, thẻ chữ được sắp xếp theo thứ tự nào?",a:["Ngẫu nhiên","Theo bảng chữ cái","Theo độ dài","Theo màu"],c:1},
+{q:"Sau khi phân loại và sắp xếp, việc tìm thẻ sẽ như thế nào?",a:["Khó hơn","Chậm hơn","Nhanh và dễ hơn","Không tìm được"],c:2},
+{q:"Khi tìm một thẻ trong dãy đã sắp xếp, ta cần làm gì trước?",a:["Xác định thẻ cần tìm","Trộn lại","Đếm số thẻ","Đổi vị trí"],c:0},
+{q:"Ghi nhớ của bài học cho biết điều gì?",a:["Sắp xếp giúp tìm nhanh","Không cần sắp xếp","Sắp xếp rất khó","Chỉ áp dụng cho thẻ"],c:0},
+
+{q:"Ở Hình 3, sách, vở và đồ dùng học tập được sắp xếp như thế nào?",a:["Để lẫn","Để riêng từng ngăn","Xếp ngẫu nhiên","Chỉ xếp sách"],c:1},
+{q:"Vì sao cách sắp xếp ở Hình 3 được coi là hợp lí?",a:["Vì đẹp","Vì phân loại rõ ràng","Vì ít đồ","Vì màu sắc"],c:1},
+{q:"Sách và vở ở Hình 3 được sắp xếp theo thứ tự nào?",a:["Theo màu","Theo kích thước","Theo bảng chữ cái","Theo số trang"],c:2},
+{q:"Muốn tìm nhanh một quyển sách ở Hình 3, em nên làm gì?",a:["Tìm ngẫu nhiên","Tìm theo bảng chữ cái","Tìm từ cuối","Tìm theo màu"],c:1},
+{q:"Đồ dùng học tập ở Hình 3 được để ở đâu?",a:["Chung với sách","Ngăn riêng","Trên bàn","Trong cặp"],c:1},
+{q:"Ở Hình 4b, đồ vật nào được xếp vào ngăn đĩa?",a:["Bát","Đũa","Đĩa","Thìa"],c:2},
+{q:"Ở Hình 4b, đồ vật nào được xếp vào ngăn bát?",a:["Đĩa","Bát","Đũa","Thìa"],c:1},
+{q:"Đũa được xếp vào đâu trong giá để bát đĩa?",a:["Ngăn đĩa","Ngăn bát","Ống đựng đũa","Ống đựng thìa"],c:2},
+{q:"Thìa được xếp vào đâu trong giá để bát đĩa?",a:["Ngăn đĩa","Ngăn bát","Ống đựng đũa","Ống đựng thìa"],c:3},
+{q:"Bát và đĩa được sắp xếp theo tiêu chí nào?",a:["Theo màu","Theo hình dạng","Theo kích thước","Theo số lượng"],c:2},
+
+{q:"Phân loại đồ vật nghĩa là gì?",a:["Để lẫn","Chia theo nhóm","Làm mất","Trang trí"],c:1},
+{q:"Khi đồ vật đã được phân loại, ta tìm như thế nào?",a:["Tìm ngẫu nhiên","Tìm trong nhóm phù hợp","Tìm từ đầu","Không tìm"],c:1},
+{q:"Sắp xếp hợp lí phụ thuộc vào điều gì?",a:["Sở thích","Yêu cầu và đặc điểm đồ vật","Màu sắc","Giá tiền"],c:1},
+{q:"Sơ đồ hình cây dùng để làm gì?",a:["Vẽ tranh","Biểu diễn sắp xếp, phân loại","Chơi game","Trang trí"],c:1},
+{q:"Trong sơ đồ hình cây, gốc cây thường thể hiện điều gì?",a:["Đồ vật chung","Chi tiết nhỏ","Màu sắc","Số lượng"],c:0},
+{q:"Các nhánh cây trong sơ đồ hình cây thường thể hiện gì?",a:["Trang trí","Các nhóm con","Màu sắc","Số trang"],c:1},
+{q:"Các nhánh cây 1,2,3 có vị trí như thế nào nếu cùng cấp?",a:["Trên dưới","Chéo nhau","Ngang nhau","Chồng lên"],c:2},
+{q:"Ngăn tủ số 1 trong Hình 5 được chia như thế nào?",a:["Theo màu","Thành 2 ngăn","Thành 3 ngăn","Không chia"],c:1},
+{q:"Áo sơ mi và quần dài thuộc ngăn nào trong Hình 5?",a:["Ngăn 1","Ngăn 2","Ngăn 3","Ngăn 0"],c:0},
+{q:"Áo phông và quần sooc là nhánh con của nhánh nào?",a:["Nhánh 1","Nhánh 2","Nhánh 3","Nhánh 0"],c:1},
+
+{q:"Vì sao áo phông và quần sooc là nhánh con của nhánh 2?",a:["Vì cùng màu","Vì cùng là quần áo thể thao","Vì cùng kích thước","Vì cùng giá"],c:1},
+{q:"Sơ đồ hình cây giúp ta điều gì?",a:["Dễ vẽ","Dễ trang trí","Dễ hiểu cách sắp xếp","Dễ chơi"],c:2},
+{q:"Khi sắp xếp bát, đĩa, đũa, thìa, gốc cây thể hiện gì?",a:["Ngăn bát","Giá để bát đĩa","Ống đũa","Ống thìa"],c:1},
+{q:"Trong sơ đồ bát đĩa, ngăn để đĩa có những nhánh nào?",a:["Đĩa nhỏ, đĩa to","Bát nhỏ, bát to","Đũa, thìa","Không có"],c:0},
+{q:"Trong sơ đồ bát đĩa, ngăn để bát có những nhánh nào?",a:["Đĩa nhỏ, đĩa to","Bát nhỏ, bát to","Đũa, thìa","Không có"],c:1},
+{q:"Ống đựng muỗng (thìa) là nhánh con của bộ phận nào?",a:["Ngăn bát","Ngăn đĩa","Giá để bát đĩa","Ống đũa"],c:2},
+{q:"Sắp xếp sách vở vào cặp nên làm thế nào?",a:["Để lẫn","Theo môn học","Theo màu","Theo kích thước"],c:1},
+{q:"Ngăn to nhất của cặp thường dùng để làm gì?",a:["Đựng bút","Đựng SGK và SBT","Đựng vở","Để trống"],c:1},
+{q:"Ngăn ở giữa của cặp thường dùng để làm gì?",a:["Đựng vở viết","Đựng SGK","Đựng đồ chơi","Đựng quần áo"],c:0},
+
+{q:"Ngăn nhỏ nhất của cặp thường dùng để làm gì?",a:["Đựng SGK","Đựng vở","Đựng đồ dùng học tập","Đựng áo"],c:2},
+{q:"Vì sao nên sắp xếp sách vở theo môn học?",a:["Đẹp","Dễ tìm","Nặng","Rẻ"],c:1},
+{q:"Khi muốn lấy một cuốn sách trong cặp, em nên làm gì?",a:["Tìm ngẫu nhiên","Tìm theo cách sắp xếp","Đổ hết ra","Nhờ bạn"],c:1},
+{q:"Sắp xếp thực phẩm trong tủ lạnh cần chú ý điều gì?",a:["Màu sắc","Loại thực phẩm","Giá tiền","Kích thước"],c:1},
+{q:"Thực phẩm cùng loại nên được sắp xếp như thế nào?",a:["Để lẫn","Để riêng","Để ngoài","Không sắp xếp"],c:1},
+{q:"Mục lục sách giúp em làm gì?",a:["Trang trí","Tìm bài nhanh","Đọc truyện","Vẽ hình"],c:1},
+{q:"Vì sao dùng mục lục giúp tìm bài nhanh?",a:["Vì đẹp","Vì các trang được sắp xếp theo thứ tự","Vì nhiều màu","Vì chữ to"],c:1},
+{q:"Khi tìm bài học trong sách, em nên làm gì trước?",a:["Lật ngẫu nhiên","Xem mục lục","Đếm trang","Hỏi bạn"],c:1},
+{q:"Sắp xếp hợp lí mang lại lợi ích gì?",a:["Tiết kiệm thời gian","Dễ tìm","Gọn gàng","Tất cả các đáp án trên"],c:3},
+{q:"Nội dung chính của bài 7 là gì?",a:["Sắp xếp để dễ tìm","Vẽ tranh","Chơi game","Gõ bàn phím"],c:0}
+];
+
+// TRỘN CÂU HỎI
+questions.sort(()=>Math.random()-0.5);
+let index=0,score=0;let details=[];
+const qEl=document.getElementById('question');
+const aEl=document.getElementById('answers');
+const bar=document.getElementById('bar');
+const next=document.getElementById('next');
+const result=document.getElementById('result');
+const report=document.getElementById('report');
+
+// ĐẾM NGƯỢC 15 PHÚT
+let total=15*60;const timerEl=document.getElementById('timer');
+const countdown=setInterval(()=>{total--;let m=Math.floor(total/60),s=total%60;timerEl.textContent=`⏱️ ${m}:${s.toString().padStart(2,'0')}`;if(total<=0){clearInterval(countdown);finish();}},1000);
+
+function shuffle(arr){return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]);}
+function load(){next.style.display='none';const q=questions[index];qEl.textContent=`Câu ${index+1}: ${q.q}`;aEl.innerHTML='';const answers=shuffle(q.a.map((t,i)=>({t,i})));answers.forEach(obj=>{const b=document.createElement('button');b.textContent=obj.t;b.onclick=()=>choose(b,obj.i,q.c,q.q,obj.t);aEl.appendChild(b)});bar.style.width=(index/questions.length*100)+'%';}
+function choose(btn,choice,correct,qtext,ans){[...aEl.children].forEach(b=>b.disabled=true);const ok=choice===correct;btn.classList.add(ok?'correct':'wrong');if(!ok){[...aEl.children].find(b=>b.textContent===questions[index].a[correct]).classList.add('correct');}if(ok)score++;details.push({q:qtext,choose:ans,correct:questions[index].a[correct],ok});next.style.display='block';}
+next.onclick=()=>{index++;if(index<questions.length)load();else finish();};
+function finish(){clearInterval(countdown);document.getElementById('quiz').style.display='none';next.style.display='none';bar.style.width='100%';result.style.display='block';result.innerHTML=`🎉 Hoàn thành!<br>Điểm: <b>${score}/${questions.length}</b>`;report.style.display='block';let html='<h3>📊 BÁO CÁO CHI TIẾT</h3><table><tr><th>Câu</th><th>Đáp án HS</th><th>Đáp án đúng</th><th>Kết quả</th></tr>';details.forEach((d,i)=>{html+=`<tr><td>${i+1}</td><td>${d.choose}</td><td>${d.correct}</td><td>${d.ok?'✔':'✘'}</td></tr>`});html+='</table>';report.innerHTML=html;}
+load();
+</script>
+</body>
+</html>

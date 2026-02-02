@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>🎮 Game kiểm tra – Xem tin và giải trí trên Internet (Lớp 3)</title>
+<style>
+body{margin:0;font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#81ecec,#74b9ff)}
+#app{max-width:1000px;margin:20px auto;background:#fff;border-radius:18px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+h1{text-align:center;color:#2d3436}
+#top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+#progress{flex:1;height:12px;background:#dfe6e9;border-radius:10px;overflow:hidden;margin:0 15px}
+#bar{height:100%;width:0%;background:linear-gradient(90deg,#ffeaa7,#00b894);transition:.4s}
+#timer{font-weight:bold;color:#d63031}
+.question{font-size:20px;margin:20px 0}
+.answers button{display:block;width:100%;margin:10px 0;padding:12px;border:none;border-radius:14px;font-size:16px;cursor:pointer;background:#f1f2f6;transition:.25s}
+.answers button:hover{background:#dff9fb;transform:scale(1.02)}
+.correct{background:#c8e6c9 !important}
+.wrong{background:#ffcdd2 !important}
+#next{display:none;margin:20px auto;padding:10px 40px;font-size:16px;border:none;border-radius:20px;background:#0984e3;color:#fff;cursor:pointer}
+#result{display:none;text-align:center;font-size:22px}
+#report{display:none;margin-top:20px}
+#report table{width:100%;border-collapse:collapse}
+#report th,#report td{border:1px solid #ccc;padding:6px;text-align:center}
+</style>
+</head>
+<body>
+<div id="app">
+<h1>🎮 GAME KIỂM TRA – XEM TIN & GIẢI TRÍ TRÊN INTERNET (LỚP 3)</h1>
+<div id="top">
+  <div id="timer">⏱️ 15:00</div>
+  <div id="progress"><div id="bar"></div></div>
+</div>
+<div id="quiz">
+  <div class="question" id="question"></div>
+  <div class="answers" id="answers"></div>
+</div>
+<button id="next">Câu tiếp theo ▶</button>
+<div id="result"></div>
+<div id="report"></div>
+</div>
+<script>
+// ====== 70 CÂU KHÔNG TRÙNG – BÀI 6 LỚP 3 ======
+const questions=[
+{q:"Máy tính kết nối Internet giúp em làm được việc gì?",a:["Xem tin tức","Nghe nhạc","Gửi thư điện tử","Tất cả các việc trên"],c:3},
+{q:"Khi có Internet, em có thể xem thông tin nào sau đây?",a:["Dự báo thời tiết","Lịch thi đấu bóng đá","Giờ mở cửa bảo tàng","Cả ba đáp án trên"],c:3},
+{q:"Để xem thông tin trên Internet, trước tiên em cần mở gì?",a:["Phần mềm vẽ","Trình duyệt web","Trình soạn thảo","Trò chơi"],c:1},
+{q:"Trang web khituongvietnam.gov.vn dùng để xem thông tin gì?",a:["Âm nhạc","Thời tiết","Trò chơi","Phim"],c:1},
+{q:"Để phóng to nội dung trên trang web, em nháy vào nút nào?",a:["-","+","Play","Stop"],c:1},
+{q:"Để thu nhỏ nội dung trên trang web, em nháy vào nút nào?",a:["+","-","Play","Enter"],c:1},
+{q:"Nháy vào biểu tượng đám mây trên trang thời tiết để làm gì?",a:["Xem phim","Xem thông tin chi tiết","Nghe nhạc","Chơi game"],c:1},
+{q:"Ngoài thời tiết, Internet còn có thể cho em xem thông tin gì?",a:["Lịch chiếu phim","Giá vé khu vui chơi","Giờ mở cửa bảo tàng","Tất cả các thông tin trên"],c:3},
+{q:"Trên Internet có những chương trình giải trí nào phù hợp với thiếu nhi?",a:["Bài hát thiếu nhi","Truyện cổ tích","Phim hoạt hình","Cả ba đáp án trên"],c:3},
+{q:"Để nghe bài hát thiếu nhi trên Internet, em cần có gì?",a:["Máy in","Loa hoặc tai nghe","Máy quét","Máy ảnh"],c:1},
+
+{q:"Trang web thieunhivietnam.vn dùng để làm gì?",a:["Xem phim","Nghe nhạc thiếu nhi","Chơi game","Học toán"],c:1},
+{q:"Để nghe nhạc trên Internet, sau khi chọn bài hát em cần nháy vào nút nào?",a:["Stop","Pause","Play","Exit"],c:2},
+{q:"Internet là gì theo bài học?",a:["Một trò chơi","Kho thông tin khổng lồ","Một phần mềm","Một thiết bị"],c:1},
+{q:"Thông tin trên Internet có đặc điểm nào?",a:["Ít","Đa dạng và phong phú","Không thay đổi","Chỉ có chữ"],c:1},
+{q:"Ai có thể tìm thấy thông tin trên Internet?",a:["Chỉ học sinh","Chỉ người lớn","Ai cũng có thể","Chỉ giáo viên"],c:2},
+{q:"Thông tin nào sau đây có thể tìm thấy trên Internet mà máy tính không có sẵn?",a:["Cách nấu ăn","Hình ảnh dải thiên hà","Hướng dẫn quàng khăn đỏ","Tất cả các thông tin trên"],c:3},
+{q:"Thông tin nào phù hợp với bạn An và Bình?",a:["Cách quàng khăn đỏ","Quảng cáo dịch vụ","Phim bạo lực","Việc làm cho sinh viên"],c:0},
+{q:"Thông tin nào phù hợp với mẹ của An và Bình?",a:["Cách nấu ăn","Truyện cổ tích","Phim hoạt hình","Trò chơi"],c:0},
+{q:"Thông tin nào phù hợp với bố của An?",a:["Phim hoạt hình","Hình ảnh dải thiên hà","Truyện cổ tích","Bài hát thiếu nhi"],c:1},
+{q:"Không phải thông tin nào trên Internet cũng phù hợp với em vì sao?",a:["Vì Internet chậm","Vì có thông tin dành cho lứa tuổi khác","Vì khó tìm","Vì không miễn phí"],c:1},
+
+{q:"Thông tin nào KHÔNG phù hợp với học sinh lớp 3?",a:["Hướng dẫn học tập","Truyện cổ tích","Phim bạo lực","Phim hoạt hình"],c:2},
+{q:"Xem thông tin không phù hợp có thể gây hại gì cho em?",a:["Ảnh hưởng tâm lí","Học tập kém","Sợ hãi","Tất cả các đáp án trên"],c:3},
+{q:"Khi xem thông tin trên Internet, em cần có sự cho phép của ai?",a:["Bạn bè","Thầy cô, bố mẹ","Người lạ","Không cần ai"],c:1},
+{q:"Để đảm bảo an toàn khi sử dụng Internet, em nên làm gì?",a:["Xem một mình","Nhờ người lớn hướng dẫn","Xem bất cứ lúc nào","Không cần hỏi"],c:1},
+{q:"Thông tin nào dưới đây phù hợp với em?",a:["Trò chơi bạo lực","Video lịch sử cho thiếu nhi","Phim kinh dị","Quảng cáo dịch vụ"],c:1},
+{q:"Internet giúp em học tập bằng cách nào?",a:["Tìm tài liệu","Xem video học tập","Tra cứu thông tin","Tất cả các cách trên"],c:3},
+{q:"Máy tính không kết nối Internet thì em KHÔNG thể làm việc nào?",a:["Soạn thảo văn bản","Xem thông tin trực tuyến","Vẽ tranh","Nghe nhạc đã tải"],c:1},
+{q:"Khi xem tin tức trên Internet, em cần chú ý điều gì?",a:["Nguồn tin phù hợp","Màu sắc đẹp","Quảng cáo","Âm thanh to"],c:0},
+{q:"Internet có thể cập nhật thông tin như thế nào?",a:["Không cập nhật","Chậm","Thường xuyên","Không bao giờ"],c:2},
+{q:"Thông tin trên Internet có thể không chính xác vì sao?",a:["Do nhiều người cung cấp","Do máy tính yếu","Do mạng chậm","Do màn hình nhỏ"],c:0},
+
+{q:"Khi tìm thông tin trên Internet, em nên làm gì nếu không hiểu?",a:["Tự đoán","Hỏi thầy cô, bố mẹ","Bỏ qua","Chia sẻ ngay"],c:1},
+{q:"Trang web truyencotich.vn dùng để làm gì?",a:["Đọc truyện cổ tích","Xem phim","Nghe nhạc","Chơi game"],c:0},
+{q:"Phim hoạt hình trên Internet thường dành cho đối tượng nào?",a:["Người lớn","Thiếu nhi","Sinh viên","Mọi lứa tuổi"],c:1},
+{q:"Khi lớp tổ chức đi dã ngoại, em có thể tìm thông tin ở đâu?",a:["Sách vở","Internet","Trí nhớ","Không tìm"],c:1},
+{q:"Để tìm thông tin về Thảo Cầm Viên, em có thể truy cập đâu?",a:["Trang web chính thức","Trò chơi","Phần mềm vẽ","Email"],c:0},
+{q:"Internet giúp em giải trí bằng cách nào?",a:["Nghe nhạc","Xem phim","Đọc truyện","Tất cả các cách trên"],c:3},
+{q:"Khi sử dụng Internet, em không nên làm gì?",a:["Xem nội dung phù hợp","Xem nội dung không phù hợp","Hỏi người lớn","Học tập"],c:1},
+{q:"Tin tức trên Internet có thể là gì?",a:["Thời tiết","Thể thao","Giải trí","Tất cả các đáp án trên"],c:3},
+{q:"Khi xem phim trên Internet, em cần chú ý điều gì?",a:["Phù hợp lứa tuổi","Âm thanh to","Màu sắc","Quảng cáo"],c:0},
+
+{q:"Internet giúp em mở rộng hiểu biết như thế nào?",a:["Biết thêm nhiều điều mới","Chỉ chơi game","Chỉ xem phim","Không giúp gì"],c:0},
+{q:"Khi tìm kiếm thông tin, em nên gõ gì vào trình duyệt?",a:["Địa chỉ web hoặc từ khóa","Hình ảnh","Âm thanh","Màu sắc"],c:0},
+{q:"Em có thể gửi thư điện tử khi nào?",a:["Khi có Internet","Khi không có Internet","Khi tắt máy","Khi ngủ"],c:0},
+{q:"Internet giúp em liên lạc với người khác bằng cách nào?",a:["Gửi email","Nhắn tin","Gọi video","Tất cả các cách trên"],c:3},
+{q:"Khi sử dụng Internet, em nên ngồi như thế nào?",a:["Ngồi thẳng","Nằm","Cúi sát màn hình","Nghiêng người"],c:0},
+{q:"Thời gian sử dụng Internet nên như thế nào?",a:["Hợp lí","Càng lâu càng tốt","Không giới hạn","Cả ngày"],c:0},
+{q:"Khi xem thông tin trên Internet, em nên làm gì nếu thấy nội dung lạ?",a:["Xem tiếp","Tắt đi và báo người lớn","Chia sẻ","Bình luận"],c:1},
+{q:"Internet giúp em chuẩn bị bài học bằng cách nào?",a:["Tìm tài liệu","Xem video học","Đọc thông tin","Tất cả các cách trên"],c:3},
+{q:"Điều quan trọng nhất khi sử dụng Internet là gì?",a:["An toàn","Nhanh","Nhiều trò chơi","Miễn phí"],c:0}
+];
+
+// TRỘN CÂU HỎI
+questions.sort(()=>Math.random()-0.5);
+let index=0,score=0;let details=[];
+const qEl=document.getElementById('question');
+const aEl=document.getElementById('answers');
+const bar=document.getElementById('bar');
+const next=document.getElementById('next');
+const result=document.getElementById('result');
+const report=document.getElementById('report');
+
+// ĐẾM NGƯỢC 15 PHÚT
+let total=15*60;const timerEl=document.getElementById('timer');
+const countdown=setInterval(()=>{total--;let m=Math.floor(total/60),s=total%60;timerEl.textContent=`⏱️ ${m}:${s.toString().padStart(2,'0')}`;if(total<=0){clearInterval(countdown);finish();}},1000);
+
+function shuffle(arr){return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]);}
+function load(){next.style.display='none';const q=questions[index];qEl.textContent=`Câu ${index+1}: ${q.q}`;aEl.innerHTML='';const answers=shuffle(q.a.map((t,i)=>({t,i})));answers.forEach(obj=>{const b=document.createElement('button');b.textContent=obj.t;b.onclick=()=>choose(b,obj.i,q.c,q.q,obj.t);aEl.appendChild(b)});bar.style.width=(index/questions.length*100)+'%';}
+function choose(btn,choice,correct,qtext,ans){[...aEl.children].forEach(b=>b.disabled=true);const ok=choice===correct;btn.classList.add(ok?'correct':'wrong');if(!ok){[...aEl.children].find(b=>b.textContent===questions[index].a[correct]).classList.add('correct');}if(ok)score++;details.push({q:qtext,choose:ans,correct:questions[index].a[correct],ok});next.style.display='block';}
+next.onclick=()=>{index++;if(index<questions.length)load();else finish();};
+function finish(){clearInterval(countdown);document.getElementById('quiz').style.display='none';next.style.display='none';bar.style.width='100%';result.style.display='block';result.innerHTML=`🎉 Hoàn thành!<br>Điểm: <b>${score}/${questions.length}</b>`;report.style.display='block';let html='<h3>📊 BÁO CÁO CHI TIẾT</h3><table><tr><th>Câu</th><th>Đáp án HS</th><th>Đáp án đúng</th><th>Kết quả</th></tr>';details.forEach((d,i)=>{html+=`<tr><td>${i+1}</td><td>${d.choose}</td><td>${d.correct}</td><td>${d.ok?'✔':'✘'}</td></tr>`});html+='</table>';report.innerHTML=html;}
+load();
+</script>
+</body>
+</html>
