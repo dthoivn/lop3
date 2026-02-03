@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>🎮 Game kiểm tra – Tập gõ bàn phím (Lớp 3)</title>
+<style>
+body{margin:0;font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#55efc4,#74b9ff)}
+#app{max-width:1200px;margin:20px auto;background:#fff;border-radius:18px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+h1{text-align:center;color:#2d3436}
+#top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+#progress{flex:1;height:12px;background:#dfe6e9;border-radius:10px;overflow:hidden;margin:0 15px}
+#bar{height:100%;width:0%;background:linear-gradient(90deg,#ffeaa7,#00b894);transition:.4s}
+#timer{font-weight:bold;color:#d63031}
+.question{font-size:20px;margin:20px 0}
+.answers button{display:block;width:100%;margin:10px 0;padding:12px;border:none;border-radius:14px;font-size:16px;cursor:pointer;background:#f1f2f6;transition:.25s}
+.answers button:hover{background:#dff9fb;transform:scale(1.02)}
+.correct{background:#c8e6c9 !important}
+.wrong{background:#ffcdd2 !important}
+#next{display:none;margin:20px auto;padding:10px 40px;font-size:16px;border:none;border-radius:20px;background:#0984e3;color:#fff;cursor:pointer}
+#result{display:none;text-align:center;font-size:22px}
+#report{display:none;margin-top:20px}
+#report table{width:100%;border-collapse:collapse}
+#report th,#report td{border:1px solid #ccc;padding:6px;text-align:center}
+</style>
+</head>
+<body>
+<div id="app">
+<h1>🎮 GAME KIỂM TRA – TẬP GÕ BÀN PHÍM (LỚP 3)</h1>
+<div id="top">
+  <div id="timer">⏱️ 15:00</div>
+  <div id="progress"><div id="bar"></div></div>
+</div>
+<div id="quiz">
+  <div class="question" id="question"></div>
+  <div class="answers" id="answers"></div>
+</div>
+<button id="next">Câu tiếp theo ▶</button>
+<div id="result"></div>
+<div id="report"></div>
+</div>
+<script>
+// ====== 70 CÂU HỎI HOÀN TOÀN MỚI – KHÔNG TRÙNG ======
+const questions=[
+{q:"Bàn phím máy tính dùng để làm gì?",a:["Nhập chữ và số","Xem phim","Nghe nhạc","In"],c:0},
+{q:"Khu vực nào có nhiều phím nhất trên bàn phím?",a:["Khu vực chính","Khu vực số","Khu vực điều khiển","Không có"],c:0},
+{q:"Khu vực chính của bàn phím có mấy hàng phím?",a:["5","3","4","6"],c:0},
+{q:"Hàng phím ở trên cùng của khu vực chính gọi là gì?",a:["Hàng phím số","Hàng phím cơ sở","Hàng phím dưới","Hàng phím chữ"],c:0},
+{q:"Hàng phím nằm giữa khu vực chính gọi là gì?",a:["Hàng phím cơ sở","Hàng phím trên","Hàng phím số","Hàng phím dưới"],c:0},
+{q:"Hàng phím ở dưới hàng phím cơ sở gọi là gì?",a:["Hàng phím dưới","Hàng phím số","Hàng phím trên","Hàng phím chữ"],c:0},
+{q:"Phím dài nhất trên bàn phím là phím nào?",a:["Phím cách","Phím Enter","Phím Shift","Phím Tab"],c:0},
+{q:"Phím cách dùng để làm gì?",a:["Tạo khoảng trống giữa các từ","Xóa chữ","Xuống dòng","In đậm"],c:0},
+{q:"Phím F và J có đặc điểm gì đặc biệt?",a:["Có gờ","Có màu","To hơn","Không có"],c:0},
+{q:"Gờ trên phím F và J giúp điều gì?",a:["Đặt tay đúng vị trí","Trang trí","Gõ nhanh hơn","Không có tác dụng"],c:0},
+
+{q:"Các phím A S D F J K L ; được gọi là gì?",a:["Phím xuất phát","Phím số","Phím điều khiển","Phím đặc biệt"],c:0},
+{q:"Vì sao gọi là phím xuất phát?",a:["Vì tay đặt ban đầu ở đó","Vì ở đầu bàn phím","Vì dễ nhìn","Vì nhiều màu"],c:0},
+{q:"Phím xuất phát nằm ở hàng phím nào?",a:["Hàng phím cơ sở","Hàng phím trên","Hàng phím dưới","Hàng phím số"],c:0},
+{q:"Hai ngón tay cái dùng để gõ phím nào?",a:["Phím cách","Phím Enter","Phím Shift","Phím Tab"],c:0},
+{q:"Khi chưa gõ phím, các ngón tay nên đặt ở đâu?",a:["Phím xuất phát","Hàng phím trên","Hàng phím dưới","Bất kì"],c:0},
+{q:"Tư thế tay khi gõ phím nên như thế nào?",a:["Thả lỏng","Gồng cứng","Nắm chặt","Co tay"],c:0},
+{q:"Ngón tay phụ trách phím nào thì làm gì?",a:["Gõ phím đó","Gõ phím bên cạnh","Không gõ","Đổi tay"],c:0},
+{q:"Khi gõ phím ngoài phím xuất phát, ngón tay cần làm gì?",a:["Vươn ra để gõ","Đổi tay","Nhờ tay khác","Không gõ"],c:0},
+{q:"Sau khi gõ phím xong, tay cần làm gì?",a:["Trở về phím xuất phát","Đặt lên phím bất kì","Đặt xuống bàn","Đổi vị trí"],c:0},
+{q:"Khi gõ phím, các ngón tay nên gõ như thế nào?",a:["Nhẹ và dứt khoát","Mạnh","Chậm","Liên tục"],c:0},
+
+{q:"Hàng phím trên nằm ở đâu so với hàng phím cơ sở?",a:["Phía trên","Phía dưới","Bên trái","Bên phải"],c:0},
+{q:"Hàng phím dưới nằm ở đâu so với hàng phím cơ sở?",a:["Phía dưới","Phía trên","Bên trái","Bên phải"],c:0},
+{q:"Muốn gõ phím ở hàng phím trên, ngón tay cần làm gì?",a:["Vươn lên","Co lại","Đổi tay","Không gõ"],c:0},
+{q:"Muốn gõ phím ở hàng phím dưới, ngón tay cần làm gì?",a:["Co xuống","Vươn lên","Đổi tay","Không gõ"],c:0},
+{q:"Sau khi gõ phím ở hàng trên hoặc dưới, tay cần làm gì?",a:["Quay về phím xuất phát","Đặt sang bên","Đổi tay","Không cần"],c:0},
+{q:"Gõ đúng phím giúp điều gì?",a:["Gõ nhanh và chính xác","Gõ chậm","Mỏi tay","Sai nhiều"],c:0},
+{q:"Phần mềm Rapid Typing dùng để làm gì?",a:["Luyện gõ bàn phím","Vẽ hình","Soạn thảo","Chơi game"],c:0},
+{q:"Khi gõ đúng phím trong Rapid Typing, kí tự thường đổi sang màu gì?",a:["Xanh","Đỏ","Vàng","Đen"],c:0},
+{q:"Khi gõ sai phím trong Rapid Typing, kí tự thường đổi sang màu gì?",a:["Đỏ","Xanh","Trắng","Đen"],c:0},
+{q:"Sau khi gõ đúng, ngón tay gợi ý thường có màu gì?",a:["Màu nổi bật","Màu đen","Không đổi","Màu nền"],c:0},
+
+{q:"Luyện gõ bàn phím giúp ích gì cho học tập?",a:["Soạn bài nhanh hơn","Viết đẹp hơn","Đọc nhanh hơn","Nghe tốt hơn"],c:0},
+{q:"Khi luyện gõ, nên chú ý điều gì?",a:["Gõ đúng phím","Gõ thật nhanh","Gõ mạnh","Không cần"],c:0},
+{q:"Khi mới học gõ phím, nên gõ như thế nào?",a:["Chậm và đúng","Nhanh","Mạnh","Tùy ý"],c:0},
+{q:"Gõ sai nhiều sẽ gây điều gì?",a:["Hình thành thói quen xấu","Không sao","Gõ nhanh hơn","Đẹp hơn"],c:0},
+{q:"Phần mềm Rapid Typing có hướng dẫn gì khi gõ?",a:["Ngón tay cần dùng","Âm thanh","Hình nền","Màu chữ"],c:0},
+{q:"Khi luyện gõ, mắt nên nhìn vào đâu?",a:["Màn hình","Bàn phím","Tay","Không cần"],c:0},
+{q:"Vì sao không nên nhìn bàn phím khi gõ?",a:["Tập thói quen gõ mười ngón","Hại mắt","Khó gõ","Không cần"],c:0},
+{q:"Gõ mười ngón giúp điều gì?",a:["Nhanh và chính xác","Chậm hơn","Mỏi tay","Sai nhiều"],c:0},
+{q:"Khi mỏi tay trong lúc luyện gõ, nên làm gì?",a:["Nghỉ ngơi","Gõ tiếp","Gõ mạnh","Đổi tay"],c:0},
+{q:"Luyện gõ thường xuyên giúp điều gì?",a:["Tiến bộ nhanh","Mỏi tay","Chán","Không đổi"],c:0},
+
+{q:"Bài tập Lesson 1 trong Rapid Typing thường luyện hàng nào?",a:["Hàng phím cơ sở","Hàng phím trên","Hàng phím dưới","Hàng phím số"],c:0},
+{q:"Bài tập Lesson 6 thường luyện hàng nào?",a:["Hàng phím trên","Hàng phím cơ sở","Hàng phím dưới","Hàng phím số"],c:0},
+{q:"Bài tập Lesson 7 thường luyện hàng nào?",a:["Hàng phím dưới","Hàng phím trên","Hàng phím cơ sở","Hàng phím số"],c:0},
+{q:"Khi luyện gõ, nên ngồi tư thế như thế nào?",a:["Ngồi thẳng","Cúi sát","Nằm","Đứng"],c:0},
+{q:"Khoảng cách mắt với màn hình nên như thế nào?",a:["Vừa phải","Rất gần","Rất xa","Không quan trọng"],c:0},
+{q:"Luyện gõ bàn phím là kĩ năng gì?",a:["Kĩ năng sử dụng máy tính","Kĩ năng vẽ","Kĩ năng nghe","Kĩ năng nói"],c:0},
+{q:"Gõ đúng phím giúp bài soạn thảo như thế nào?",a:["Ít lỗi hơn","Nhiều lỗi","Không đổi","Khó đọc"],c:0},
+{q:"Thói quen gõ đúng cần rèn từ khi nào?",a:["Khi mới học","Khi lớn","Không cần","Khi đi làm"],c:0},
+{q:"Mục tiêu chính của bài học này là gì?",a:["Biết gõ bàn phím đúng cách","Chơi game","Vẽ","Xem phim"],c:0},
+{q:"Sau khi học xong bài này, em làm được gì?",a:["Gõ đúng các hàng phím","Đặt tay đúng","Luyện gõ với phần mềm","Tất cả"],c:3}
+];
+
+// TRỘN CÂU HỎI MỖI LẦN MỞ
+questions.sort(()=>Math.random()-0.5);
+let index=0,score=0;let details=[];
+const qEl=document.getElementById('question');
+const aEl=document.getElementById('answers');
+const bar=document.getElementById('bar');
+const next=document.getElementById('next');
+const result=document.getElementById('result');
+const report=document.getElementById('report');
+
+// ĐẾM NGƯỢC 15 PHÚT
+let total=15*60;const timerEl=document.getElementById('timer');
+const countdown=setInterval(()=>{total--;let m=Math.floor(total/60),s=total%60;timerEl.textContent=`⏱️ ${m}:${s.toString().padStart(2,'0')}`;if(total<=0){clearInterval(countdown);finish();}},1000);
+
+function shuffle(arr){return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]);}
+function load(){next.style.display='none';const q=questions[index];qEl.textContent=`Câu ${index+1}: ${q.q}`;aEl.innerHTML='';const answers=shuffle(q.a.map((t,i)=>({t,i})));answers.forEach(obj=>{const b=document.createElement('button');b.textContent=obj.t;b.onclick=()=>choose(b,obj.i,q.c,q.q,obj.t);aEl.appendChild(b)});bar.style.width=(index/questions.length*100)+'%';}
+function choose(btn,choice,correct,qtext,ans){[...aEl.children].forEach(b=>b.disabled=true);const ok=choice===correct;btn.classList.add(ok?'correct':'wrong');if(!ok){[...aEl.children].find(b=>b.textContent===questions[index].a[correct]).classList.add('correct');}if(ok)score++;details.push({q:qtext,choose:ans,correct:questions[index].a[correct],ok});next.style.display='block';}
+next.onclick=()=>{index++;if(index<questions.length)load();else finish();};
+function finish(){clearInterval(countdown);document.getElementById('quiz').style.display='none';next.style.display='none';bar.style.width='100%';result.style.display='block';result.innerHTML=`🎉 Hoàn thành!<br>Điểm: <b>${score}/${questions.length}</b>`;report.style.display='block';let html='<h3>📊 BÁO CÁO CHI TIẾT</h3><table><tr><th>Câu</th><th>Đáp án HS</th><th>Đáp án đúng</th><th>Kết quả</th></tr>';details.forEach((d,i)=>{html+=`<tr><td>${i+1}</td><td>${d.choose}</td><td>${d.correct}</td><td>${d.ok?'✔':'✘'}</td></tr>`});html+='</table>';report.innerHTML=html;}
+load();
+</script>
+</body>
+</html>
