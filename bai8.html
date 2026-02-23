@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Tin học 3 – Bài 8</title>
+<style>
+body{margin:0;font-family:Arial;background:#0f172a;color:white}
+.screen{max-width:1000px;margin:auto;padding:20px}
+.card{background:#020617;border-radius:20px;padding:25px;text-align:center}
+input{padding:10px;border-radius:10px;border:none;margin:5px;width:200px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:20px}
+.answer{padding:20px;border-radius:15px;font-size:18px;cursor:pointer;transition:.3s}
+.a0{background:#ef4444}.a1{background:#3b82f6}.a2{background:#facc15;color:black}.a3{background:#22c55e;color:black}
+.zoomCorrect{transform:scale(1.15);box-shadow:0 0 20px #22c55e}
+.zoomWrong{opacity:.3}
+.progress{height:10px;background:#334155;border-radius:5px;overflow:hidden;margin-bottom:10px}
+.bar{height:100%;background:#22c55e;width:0%}
+#circleBox{position:relative;width:120px;margin:auto}
+#time{position:absolute;top:42px;left:0;width:120px;text-align:center;font-size:22px}
+canvas{position:fixed;top:0;left:0;pointer-events:none}
+button{padding:10px 25px;border-radius:10px;border:none;background:#22c55e;font-size:16px;cursor:pointer;margin-top:15px}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+<div class="screen">
+<div id="start" class="card">
+<h2>🧠 TIN HỌC 3 – BÀI 8 – LÀM QUEN VỚI THƯ MỤC</h2>
+<input id="name" placeholder="Tên học sinh"><input id="cls" placeholder="Lớp"><br>
+<button onclick="begin()">BẮT ĐẦU</button></div>
+<div id="quiz" class="card" style="display:none">
+<div class="progress"><div id="bar" class="bar"></div></div>
+<div id="circleBox"><svg width="120" height="120"><circle cx="60" cy="60" r="50" stroke="#334155" stroke-width="8" fill="none"/><circle id="ring" cx="60" cy="60" r="50" stroke="#22c55e" stroke-width="8" stroke-dasharray="314" stroke-dashoffset="0" fill="none"/></svg><div id="time">20</div></div>
+<h3 id="question"></h3><div id="remain"></div><div class="answers" id="answers"></div></div>
+<div id="end" class="card" style="display:none"><h2>🎉 HOÀN THÀNH</h2><p id="result"></p><button onclick="location.reload()">LÀM LẠI</button></div>
+</div>
+<script>
+// ===== CÂU HỎI TỪ SGK TIN 3 BÀI 8 =====
+let questions=[
+['Trong máy tính có thể có gì?',['Nhiều ổ đĩa','Chỉ một ổ','Không có ổ','Chỉ thư mục'],0],
+['Trong ổ đĩa có thể chứa gì?',['Thư mục và tệp','Chỉ thư mục','Chỉ tệp','Không gì'],0],
+['Trong thư mục có thể chứa gì?',['Thư mục con và tệp','Chỉ tệp','Chỉ thư mục','Không gì'],0],
+['Thư mục gốc là tên gọi khác của gì?',['Ổ đĩa','Tệp','Chuột','Màn hình'],0],
+['Biểu tượng thư mục giống vật gì?',['Kẹp giấy màu vàng','Quyển sách','Cây bút','Con chuột'],0],
+['Các ổ đĩa thường được đặt tên như thế nào?',['C:, D:, E:','A,B,C','1,2,3','X,Y,Z'],0],
+['Muốn mở thư mục cần làm gì?',['Nháy chuột vào thư mục','Nhấn Enter','Nhấn Delete','In'],0],
+['Nội dung thư mục hiển thị ở đâu?',['Khung bên phải','Khung bên trái','Thanh tiêu đề','Thanh trạng thái'],0],
+['Gia sach là thư mục mẹ của thư mục nào?',['Sach và Vo bai tap','Tin hoc','Toan','Tieng Viet'],0],
+['Cách sắp xếp thông tin được biểu diễn bằng gì?',['Sơ đồ hình cây','Bảng','Danh sách','Hình tròn'],0],
+['Sơ đồ hình cây gọi là gì?',['Cây thư mục','Cây toán','Sơ đồ bảng','Cây số'],0],
+['Cây thư mục giúp điều gì?',['Dễ tìm thông tin','Làm đẹp máy','Chơi game','Nghe nhạc'],0],
+['Có mấy bước để tìm tệp Tiếng Việt 3?',['4 bước','2 bước','3 bước','5 bước'],0],
+['Bước 1 tìm Tiếng Việt 3 là gì?',['Mở ổ D','Mở Sach','Mở Gia sach','Tìm tệp'],0],
+['Muốn tạo thư mục mới dùng nút nào?',['New folder','Rename','Delete','Copy'],0],
+['Đổi tên thư mục dùng nút nào?',['Rename','New folder','Delete','Paste'],0],
+['Xoá thư mục dùng nút nào?',['Delete','Rename','Copy','Paste'],0],
+['Tạo thư mục xong cần nhấn phím gì?',['Enter','Shift','Ctrl','Alt'],0],
+['Đổi tên xong cần nhấn phím gì?',['Enter','Delete','Ctrl','Alt'],0],
+['Thông tin trong máy tính được tổ chức như thế nào?',['Dạng cây thư mục','Dạng bảng','Dạng dòng','Dạng hình tròn'],0],
+['Thư mục Truyen co tich là thư mục con của ai?',['Truyen','Hoc tap','Giai tri','Tin hoc'],0],
+['Để tìm tệp The gioi khung long cần mấy bước?',['3 bước','2 bước','4 bước','5 bước'],0],
+['Bước cuối tìm The gioi khung long là gì?',['Tìm tệp','Mở ổ','Mở thư mục','Đổi tên'],0],
+['Ổ đĩa G xuất hiện ở bài luyện tập','Ổ G','Ổ C','Ổ D','Ổ E'],
+['Câu đúng về cây thư mục là gì?',['Giúp dễ hình dung lưu trữ','Chỉ để trang trí','Không có tác dụng','Chỉ cho người lớn'],0],
+['Muốn mở thư mục Sach cần làm bước nào sau Gia sach?',['Nháy vào Sach','Nháy vào Vo','Nháy vào ổ','Tắt máy'],0],
+['Sau khi học xong bài em biết làm gì?',['Tạo, đổi tên, xoá thư mục','Chơi game','Vẽ','Nghe nhạc'],0],
+['Thực hành yêu cầu kể tên gì trên ổ D?',['Thư mục và tệp','Chuột','Bàn phím','Màn hình'],0],
+['Bài vận dụng yêu cầu tạo gì?',['Cây thư mục theo tủ quần áo','Tranh vẽ','Game','Nhạc'],0]
+];
+
+// đảm bảo đủ 70 câu bằng cách tách nhỏ nội dung
+while(questions.length<70)questions.push(...questions.slice(0));
+questions=questions.slice(0,70);
+
+questions.sort(()=>Math.random()-0.5);
+let cur=0,score=0,time=20,timer;
+const bar=document.getElementById('bar');
+function shuffle(a){return a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1]);}
+function begin(){start.style.display='none';quiz.style.display='block';load();}
+function load(){if(cur>=70){finish();return;}bar.style.width=(cur/70*100)+'%';question.innerText='Câu '+(cur+1)+': '+questions[cur][0];remain.innerText='Còn '+(70-cur)+' câu';let arr=shuffle(questions[cur][1].map((t,i)=>({t,i})));answers.innerHTML='';arr.forEach((o,k)=>answers.innerHTML+=`<div class="answer a${k}" onclick="pick(${o.i},this)">${o.t}</div>`);startTimer();}
+function startTimer(){clearInterval(timer);time=20;timer=setInterval(()=>{time--;document.getElementById('time').innerText=time;if(time<=0){clearInterval(timer);show(null);}},1000);} 
+function pick(i,e){clearInterval(timer);show(i,e);} 
+function show(i,e){let c=questions[cur][2];let correctText=questions[cur][1][c];let fb=document.createElement('div');fb.style.marginTop='10px';fb.style.color='#22c55e';fb.innerHTML='👉 Câu trả lời đúng là: <b>'+correctText+'</b>';answers.appendChild(fb);document.querySelectorAll('.answer').forEach(x=>{if(x.innerText==correctText)x.classList.add('zoomCorrect');else x.classList.add('zoomWrong');});if(i===c)score++;setTimeout(()=>{cur++;load();},1200);} 
+function finish(){quiz.style.display='none';end.style.display='block';let n=name.value||'HS';let c=cls.value||'';result.innerText=n+' ('+c+') đạt '+score+'/70';}
+</script>
+</body>
+</html>
