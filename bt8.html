@@ -10,6 +10,7 @@ body{
     background: linear-gradient(to right,#c2e9fb,#a1c4fd);
     padding:20px;
     line-height:1.7;
+    overflow-x:hidden;
 }
 
 .container{
@@ -19,16 +20,12 @@ body{
     padding:25px;
     border-radius:15px;
     box-shadow:0 0 15px rgba(0,0,0,0.2);
+    position:relative;
+    z-index:2;
 }
 
-h2{
-    color:#ff6600;
-    text-align:center;
-}
-
-h3{
-    color:#003399;
-}
+h2{color:#ff6600;text-align:center;}
+h3{color:#003399;}
 
 .step{
     background:#e9f4ff;
@@ -65,10 +62,21 @@ hr{
     color:#2e7d32;
     margin-top:20px;
 }
+
+/* Canvas tuyết */
+#snow{
+    position:fixed;
+    top:0;
+    left:0;
+    pointer-events:none;
+    z-index:1;
+}
 </style>
 </head>
 
 <body>
+
+<canvas id="snow"></canvas>
 
 <div class="container">
 
@@ -77,7 +85,6 @@ hr{
 <hr>
 
 <h3>🌟 Bài 1: Mở File Explorer</h3>
-
 <div class="step">
 1. Nhấn Windows + E<br>
 2. Gõ This PC<br>
@@ -87,7 +94,6 @@ hr{
 <hr>
 
 <h3>📁 Bài 2: Mở ổ D:</h3>
-
 <div class="step">
 Nháy đúp chuột vào ổ D:
 </div>
@@ -95,11 +101,9 @@ Nháy đúp chuột vào ổ D:
 <hr>
 
 <h3>➕ Bài 3: Tạo thư mục Hoc tap</h3>
-
 <div class="step">
 Chuột phải → New → Folder
 </div>
-
 <div class="step">
 Gõ: Hoc tap → Enter
 </div>
@@ -107,13 +111,11 @@ Gõ: Hoc tap → Enter
 <hr>
 
 <h3>📂 Bài 4: Tạo thư mục con</h3>
-
 <div class="code">
 Toan<br>
 Tieng Viet<br>
 Tin hoc
 </div>
-
 <div class="step">
 Mở Hoc tap → tạo 3 thư mục trên
 </div>
@@ -121,7 +123,6 @@ Mở Hoc tap → tạo 3 thư mục trên
 <hr>
 
 <h3>✏️ Bài 5: Đổi tên Tin hoc</h3>
-
 <div class="step">
 Chuột phải Tin hoc → Rename → gõ Tin hoc lop 3 → Enter
 </div>
@@ -129,7 +130,6 @@ Chuột phải Tin hoc → Rename → gõ Tin hoc lop 3 → Enter
 <hr>
 
 <h3>🗑️ Bài 6: Xóa thư mục Toan</h3>
-
 <div class="step">
 Chuột phải Toan → Delete
 </div>
@@ -137,7 +137,6 @@ Chuột phải Toan → Delete
 <hr>
 
 <h3>🎒 Bài 7: Vận dụng</h3>
-
 <p>Tạo thư mục Quan ao trong ổ D:, bên trong có:</p>
 
 <div class="code">
@@ -154,7 +153,6 @@ Tạo Quan ao → mở → tạo Ao, Quan, Dong phuc
 <hr>
 
 <h3>✅ HOÀN THÀNH KHI:</h3>
-
 <ul>
 <li>Có thư mục Hoc tap</li>
 <li>Có Tin hoc lop 3</li>
@@ -165,6 +163,62 @@ Tạo Quan ao → mở → tạo Ao, Quan, Dong phuc
 <div class="finish">🎉 CÁC EM ĐÃ XONG BÀI!</div>
 
 </div>
+
+<script>
+// ===== TUYẾT KIỂU ALASKA =====
+const canvas = document.getElementById("snow");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let snowflakes = [];
+let wind = 0;
+
+for(let i=0;i<250;i++){   // nhiều tuyết hơn
+    snowflakes.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:Math.random()*5+1,      // kích thước khác nhau
+        speed:Math.random()*1+0.5,
+        drift:Math.random()*1-0.5
+    });
+}
+
+function drawSnow(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle="white";
+    ctx.beginPath();
+
+    snowflakes.forEach(f=>{
+        ctx.moveTo(f.x,f.y);
+        ctx.arc(f.x,f.y,f.r,0,Math.PI*2,true);
+    });
+
+    ctx.fill();
+    updateSnow();
+}
+
+function updateSnow(){
+    wind += 0.002; // gió nhẹ
+    snowflakes.forEach((f,i)=>{
+        f.y += f.speed;
+        f.x += Math.sin(wind) + f.drift;
+
+        if(f.y > canvas.height){
+            snowflakes[i] = {
+                x:Math.random()*canvas.width,
+                y:0,
+                r:f.r,
+                speed:f.speed,
+                drift:f.drift
+            };
+        }
+    });
+}
+
+setInterval(drawSnow,30);
+</script>
 
 </body>
 </html>
