@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Bài 14 – Thực hiện công việc theo điều kiện</title>
+
+<style>
+body{margin:0;font-family:Arial;background:#0f172a;color:white}
+.screen{max-width:1000px;margin:auto;padding:20px}
+.card{background:#020617;border-radius:20px;padding:25px;text-align:center}
+
+input{padding:10px;border-radius:10px;border:none;margin:5px;width:200px}
+
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:20px}
+.answer{padding:20px;border-radius:15px;font-size:18px;cursor:pointer;transition:.3s}
+
+.a0{background:#ef4444}
+.a1{background:#3b82f6}
+.a2{background:#facc15;color:black}
+.a3{background:#22c55e;color:black}
+
+.zoomCorrect{transform:scale(1.15);box-shadow:0 0 20px #22c55e}
+.zoomWrong{opacity:.3}
+
+.progress{height:10px;background:#334155;border-radius:5px;overflow:hidden;margin-bottom:10px}
+.bar{height:100%;background:#22c55e;width:0%}
+
+#circleBox{position:relative;width:120px;margin:auto}
+#time{position:absolute;top:42px;left:0;width:120px;text-align:center;font-size:22px}
+
+.correctBox{margin-top:10px;color:#22c55e;font-weight:bold}
+
+table{width:100%;margin-top:20px;border-collapse:collapse}
+th,td{padding:8px;border-bottom:1px solid #334155}
+
+canvas{position:fixed;top:0;left:0;pointer-events:none}
+
+button{padding:10px 25px;border-radius:10px;border:none;background:#22c55e;font-size:16px;cursor:pointer;margin-top:15px}
+</style>
+</head>
+
+<body>
+
+<canvas id="fx"></canvas>
+
+<div class="screen">
+
+<div id="start" class="card">
+<h2>📚 BÀI 14 – THỰC HIỆN CÔNG VIỆC THEO ĐIỀU KIỆN</h2>
+<input id="name" placeholder="Tên học sinh">
+<input id="cls" placeholder="Lớp"><br>
+<button onclick="begin()">BẮT ĐẦU</button>
+</div>
+
+<div id="quiz" class="card" style="display:none">
+
+<div class="progress"><div id="bar" class="bar"></div></div>
+
+<div id="circleBox">
+<svg width="120" height="120">
+<circle cx="60" cy="60" r="50" stroke="#334155" stroke-width="8" fill="none"/>
+</svg>
+<div id="time">20</div>
+</div>
+
+<h3 id="question"></h3>
+<div id="remain"></div>
+<div class="answers" id="answers"></div>
+<div id="correctBox" class="correctBox"></div>
+
+</div>
+
+<div id="end" class="card" style="display:none">
+<h2>🎉 HOÀN THÀNH</h2>
+<p id="result"></p>
+
+<h3>🏆 BẢNG XẾP HẠNG</h3>
+<table id="leaderboard"></table>
+
+<button onclick="location.reload()">LÀM LẠI</button>
+</div>
+
+</div>
+
+<script>
+
+const canvas=document.getElementById("fx")
+const ctx=canvas.getContext("2d")
+canvas.width=innerWidth
+canvas.height=innerHeight
+
+function fireworks(){
+for(let i=0;i<200;i++){
+ctx.fillStyle=`hsl(${Math.random()*360},100%,60%)`
+ctx.fillRect(Math.random()*canvas.width,Math.random()*canvas.height,6,10)
+}
+setTimeout(()=>ctx.clearRect(0,0,canvas.width,canvas.height),800)
+}
+
+let questions=[
+
+["Câu nói 'Nếu… thì…' dùng để làm gì?",["Diễn tả điều kiện","Hỏi","Chào","So sánh"],0],
+["Trong câu 'Nếu trời mưa thì mang áo mưa', điều kiện là gì?",["Trời mưa","Mang áo mưa","Đi học","Đi chơi"],0],
+["Trong câu trên, hành động là gì?",["Mang áo mưa","Trời mưa","Đi học","Đi chơi"],0],
+
+["Nếu trời nắng thì bạn nên mang gì?",["Mũ rộng vành","Áo mưa","Ô","Áo khoác"],0],
+["Nếu trời mưa thì Lan nên mang gì?",["Áo mưa","Mũ","Bình nước","Cặp"],0],
+
+["Nếu có Internet thì em có thể làm gì?",["Xem phim hoạt hình","Ngủ","Ăn","Đóng máy"],0],
+
+["Nếu có tiết thể chất thì em mặc gì?",["Đồng phục thể thao","Áo mưa","Áo khoác","Đồng phục thường"],0],
+
+["Nếu bạn không làm được bài tập thì em nên?",["Giúp bạn","Cười","Bỏ đi","Không làm"],0],
+
+["Nếu cô giáo giảng bài thì em?",["Lắng nghe","Nói chuyện","Chơi","Đi ra ngoài"],0],
+
+["Nếu người khác đang nói thì em?",["Không nói xen vào","Nói to","Cười","Chạy"],0],
+
+["Câu 'Nếu… thì…' gồm mấy phần?",["2","3","4","1"],0],
+
+["Phần sau từ 'Nếu' là gì?",["Điều kiện","Kết quả","Câu hỏi","Mệnh lệnh"],0],
+
+["Phần sau từ 'Thì' là gì?",["Hành động","Điều kiện","Câu hỏi","Chào"],0]
+
+]
+
+while(questions.length<70){
+questions.push(...questions.slice(0,10))
+}
+
+questions=questions.slice(0,70)
+questions.sort(()=>Math.random()-0.5)
+
+let current=0
+let score=0
+let time=20
+let timer
+
+function shuffle(arr){
+return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1])
+}
+
+function begin(){
+start.style.display="none"
+quiz.style.display="block"
+loadQuestion()
+}
+
+function loadQuestion(){
+
+if(current>=questions.length){
+finish()
+return
+}
+
+bar.style.width=(current/questions.length*100)+"%"
+
+question.innerText="Câu "+(current+1)+": "+questions[current][0]
+
+remain.innerText="Còn "+(questions.length-current)+" câu"
+
+let answersData=[...questions[current][1]].map((a,i)=>({text:a,index:i}))
+answersData=shuffle(answersData)
+
+answers.innerHTML=""
+correctBox.innerHTML=""
+
+answersData.forEach((a,k)=>{
+answers.innerHTML+=`<div class="answer a${k}" onclick="selectAnswer(${a.index})">${a.text}</div>`
+})
+
+startTimer()
+
+}
+
+function startTimer(){
+
+clearInterval(timer)
+time=20
+timeEl.innerText=time
+
+timer=setInterval(()=>{
+time--
+timeEl.innerText=time
+
+if(time<=0){
+clearInterval(timer)
+showAnswer(null)
+}
+
+},1000)
+
+}
+
+const timeEl=document.getElementById("time")
+
+function selectAnswer(index){
+clearInterval(timer)
+showAnswer(index)
+}
+
+function showAnswer(index){
+
+let correct=questions[current][2]
+let correctText=questions[current][1][correct]
+
+document.querySelectorAll(".answer").forEach(el=>{
+if(el.innerText===correctText) el.classList.add("zoomCorrect")
+else el.classList.add("zoomWrong")
+})
+
+if(index===correct) score++
+
+correctBox.innerText="👉 Câu trả lời đúng là: "+correctText
+
+setTimeout(()=>{
+current++
+loadQuestion()
+},1500)
+
+}
+
+function finish(){
+
+quiz.style.display="none"
+end.style.display="block"
+
+let n=name.value||"HS"
+let c=cls.value||""
+
+result.innerText=n+" ("+c+") đạt "+score+"/70 điểm"
+
+fireworks()
+
+let board=JSON.parse(localStorage.board||"[]")
+board.push({name:n,cls:c,score})
+
+board.sort((a,b)=>b.score-a.score)
+board=board.slice(0,10)
+
+localStorage.board=JSON.stringify(board)
+
+let html="<tr><th>Hạng</th><th>Tên</th><th>Lớp</th><th>Điểm</th></tr>"
+
+board.forEach((b,i)=>{
+html+=`<tr><td>${i+1}</td><td>${b.name}</td><td>${b.cls}</td><td>${b.score}</td></tr>`
+})
+
+leaderboard.innerHTML=html
+}
+
+</script>
+
+</body>
+</html>
