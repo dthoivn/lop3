@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Bài 11B - Luyện tập sử dụng chuột</title>
+
+<style>
+body{margin:0;font-family:Arial;background:#0f172a;color:white}
+.screen{max-width:1000px;margin:auto;padding:20px}
+.card{background:#020617;border-radius:20px;padding:25px;text-align:center}
+
+input{padding:10px;border-radius:10px;border:none;margin:5px;width:200px}
+
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:20px}
+.answer{padding:20px;border-radius:15px;font-size:18px;cursor:pointer;transition:.3s}
+
+.a0{background:#ef4444}
+.a1{background:#3b82f6}
+.a2{background:#facc15;color:black}
+.a3{background:#22c55e;color:black}
+
+.zoomCorrect{transform:scale(1.15);box-shadow:0 0 20px #22c55e}
+.zoomWrong{opacity:.3}
+
+.progress{height:10px;background:#334155;border-radius:5px;overflow:hidden;margin-bottom:10px}
+.bar{height:100%;background:#22c55e;width:0%}
+
+#circleBox{position:relative;width:120px;margin:auto}
+#time{position:absolute;top:42px;left:0;width:120px;text-align:center;font-size:22px}
+
+.correctBox{margin-top:10px;color:#22c55e;font-weight:bold}
+
+button{padding:10px 25px;border-radius:10px;border:none;background:#22c55e;font-size:16px;cursor:pointer;margin-top:15px}
+</style>
+</head>
+
+<body>
+
+<div class="screen">
+
+<div id="start" class="card">
+<h2>🖱️ BÀI 11B – LUYỆN TẬP SỬ DỤNG CHUỘT</h2>
+<input id="name" placeholder="Tên học sinh">
+<input id="cls" placeholder="Lớp"><br>
+<button onclick="begin()">BẮT ĐẦU</button>
+</div>
+
+<div id="quiz" class="card" style="display:none">
+
+<div class="progress"><div id="bar" class="bar"></div></div>
+
+<div id="circleBox">
+<svg width="120" height="120">
+<circle cx="60" cy="60" r="50" stroke="#334155" stroke-width="8" fill="none"/>
+</svg>
+<div id="time">20</div>
+</div>
+
+<h3 id="question"></h3>
+<div id="remain"></div>
+<div class="answers" id="answers"></div>
+<div id="correctBox" class="correctBox"></div>
+
+</div>
+
+<div id="end" class="card" style="display:none">
+<h2>🎉 HOÀN THÀNH</h2>
+<p id="result"></p>
+<button onclick="location.reload()">LÀM LẠI</button>
+</div>
+
+</div>
+
+<script>
+
+let questions=[
+
+["Cầm chuột đúng thì cổ tay như thế nào?",["Thẳng với bàn tay","Cong xuống","Gập mạnh","Không cần"],0],
+["Ngón trỏ đặt ở đâu?",["Nút trái chuột","Nút phải","Bánh xe","Không cần"],0],
+["Ngón giữa đặt ở đâu?",["Nút phải chuột","Nút trái","Bánh xe","Bên chuột"],0],
+["Di chuyển chuột nghĩa là gì?",["Di chuyển chuột trên mặt phẳng","Nhấn chuột","Nháy chuột","Lăn chuột"],0],
+["Nháy chuột là gì?",["Nhấn và thả nút trái nhanh","Nhấn giữ lâu","Lăn chuột","Nhấn phải"],0],
+["Nháy đúp chuột là gì?",["Nháy nhanh hai lần","Nhấn giữ","Lăn chuột","Nhấn phải"],0],
+["Nháy phải chuột là gì?",["Nhấn nút phải chuột","Nhấn trái","Nhấn bánh xe","Không gì"],0],
+["Kéo thả chuột là gì?",["Nhấn giữ và di chuyển","Nhấn nhanh","Lăn chuột","Nhấn phải"],0],
+["Lăn nút cuộn dùng để?",["Cuộn trang","Xóa","Copy","Đóng"],0],
+["Phần mềm luyện chuột?",["Basic Mouse Skills","Word","Excel","Paint"],0],
+
+["Khởi động phần mềm bằng cách?",["Nháy đúp biểu tượng","Nhấn Delete","Nhấn Shift","Nhấn Ctrl"],0],
+["Nút phóng to màn hình?",["Full Screen","Open","Save","Exit"],0],
+["Mức 1 luyện gì?",["Di chuyển chuột","Nháy phải","Kéo thả","Nháy đúp"],0],
+["Mức 2 luyện gì?",["Nháy chuột","Di chuyển","Lăn","Kéo"],0],
+["Mức 3 luyện gì?",["Nháy đúp chuột","Nháy phải","Lăn","Di chuyển"],0],
+["Mức 4 luyện gì?",["Nháy phải chuột","Nháy chuột","Nháy đúp","Lăn"],0],
+["Mức 5 luyện gì?",["Kéo và thả","Nháy phải","Nháy chuột","Di chuyển"],0],
+["Sau mỗi mức sẽ làm gì?",["Chuyển sang mức tiếp","Thoát","Đóng","Xóa"],0],
+["Nút luyện lại?",["Try Again","Quit","Save","Open"],0],
+["Nút thoát phần mềm?",["Quit","Try Again","Save","Open"],0]
+
+];
+
+while(questions.length<70){
+questions.push(...questions.slice(0,20))
+}
+
+questions=questions.slice(0,70)
+
+questions.sort(()=>Math.random()-0.5)
+
+let current=0
+let score=0
+let time=20
+let timer
+
+function shuffle(arr){
+return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1])
+}
+
+function begin(){
+start.style.display="none"
+quiz.style.display="block"
+loadQuestion()
+}
+
+function loadQuestion(){
+
+if(current>=questions.length){
+finish()
+return
+}
+
+bar.style.width=(current/questions.length*100)+"%"
+
+question.innerText="Câu "+(current+1)+": "+questions[current][0]
+remain.innerText="Còn "+(questions.length-current)+" câu"
+
+let answersData=[...questions[current][1]].map((a,i)=>({text:a,index:i}))
+answersData=shuffle(answersData)
+
+answers.innerHTML=""
+correctBox.innerHTML=""
+
+answersData.forEach((a,k)=>{
+answers.innerHTML+=`<div class="answer a${k}" onclick="selectAnswer(${a.index})">${a.text}</div>`
+})
+
+startTimer()
+
+}
+
+function startTimer(){
+
+clearInterval(timer)
+time=20
+timeEl.innerText=time
+
+timer=setInterval(()=>{
+time--
+timeEl.innerText=time
+
+if(time<=0){
+clearInterval(timer)
+showAnswer(null)
+}
+
+},1000)
+
+}
+
+const timeEl=document.getElementById("time")
+
+function selectAnswer(index){
+clearInterval(timer)
+showAnswer(index)
+}
+
+function showAnswer(index){
+
+let correct=questions[current][2]
+let correctText=questions[current][1][correct]
+
+document.querySelectorAll(".answer").forEach(el=>{
+if(el.innerText===correctText) el.classList.add("zoomCorrect")
+else el.classList.add("zoomWrong")
+})
+
+if(index===correct) score++
+
+correctBox.innerText="👉 Câu trả lời đúng là: "+correctText
+
+setTimeout(()=>{
+current++
+loadQuestion()
+},1500)
+
+}
+
+function finish(){
+
+quiz.style.display="none"
+end.style.display="block"
+
+let n=name.value||"HS"
+let c=cls.value||""
+
+result.innerText=n+" ("+c+") đạt "+score+"/70 điểm"
+
+}
+
+</script>
+
+</body>
+</html>
