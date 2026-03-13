@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Bài 15 – Nhiệm vụ của em và sự trợ giúp của máy tính</title>
+
+<style>
+body{margin:0;font-family:Arial;background:#0f172a;color:white}
+.screen{max-width:1000px;margin:auto;padding:20px}
+.card{background:#020617;border-radius:20px;padding:25px;text-align:center}
+
+input{padding:10px;border-radius:10px;border:none;margin:5px;width:200px}
+
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:20px}
+.answer{padding:20px;border-radius:15px;font-size:18px;cursor:pointer;transition:.3s}
+
+.a0{background:#ef4444}
+.a1{background:#3b82f6}
+.a2{background:#facc15;color:black}
+.a3{background:#22c55e;color:black}
+
+.zoomCorrect{transform:scale(1.15);box-shadow:0 0 20px #22c55e}
+.zoomWrong{opacity:.3}
+
+.progress{height:10px;background:#334155;border-radius:5px;overflow:hidden;margin-bottom:10px}
+.bar{height:100%;background:#22c55e;width:0%}
+
+#circleBox{position:relative;width:120px;margin:auto}
+#time{position:absolute;top:42px;left:0;width:120px;text-align:center;font-size:22px}
+
+.correctBox{margin-top:10px;color:#22c55e;font-weight:bold}
+
+table{width:100%;margin-top:20px;border-collapse:collapse}
+th,td{padding:8px;border-bottom:1px solid #334155}
+
+canvas{position:fixed;top:0;left:0;pointer-events:none}
+
+button{padding:10px 25px;border-radius:10px;border:none;background:#22c55e;font-size:16px;cursor:pointer;margin-top:15px}
+</style>
+</head>
+
+<body>
+
+<canvas id="fx"></canvas>
+
+<div class="screen">
+
+<div id="start" class="card">
+<h2>📚 BÀI 15 – NHIỆM VỤ VÀ SỰ TRỢ GIÚP CỦA MÁY TÍNH</h2>
+<input id="name" placeholder="Tên học sinh">
+<input id="cls" placeholder="Lớp"><br>
+<button onclick="begin()">BẮT ĐẦU</button>
+</div>
+
+<div id="quiz" class="card" style="display:none">
+
+<div class="progress"><div id="bar" class="bar"></div></div>
+
+<div id="circleBox">
+<svg width="120" height="120">
+<circle cx="60" cy="60" r="50" stroke="#334155" stroke-width="8" fill="none"/>
+</svg>
+<div id="time">20</div>
+</div>
+
+<h3 id="question"></h3>
+<div id="remain"></div>
+<div class="answers" id="answers"></div>
+<div id="correctBox" class="correctBox"></div>
+
+</div>
+
+<div id="end" class="card" style="display:none">
+<h2>🎉 HOÀN THÀNH</h2>
+<p id="result"></p>
+
+<h3>🏆 BẢNG XẾP HẠNG</h3>
+<table id="leaderboard"></table>
+
+<button onclick="location.reload()">LÀM LẠI</button>
+</div>
+
+</div>
+
+<script>
+
+const canvas=document.getElementById("fx")
+const ctx=canvas.getContext("2d")
+canvas.width=innerWidth
+canvas.height=innerHeight
+
+function fireworks(){
+for(let i=0;i<200;i++){
+ctx.fillStyle=`hsl(${Math.random()*360},100%,60%)`
+ctx.fillRect(Math.random()*canvas.width,Math.random()*canvas.height,6,10)
+}
+setTimeout(()=>ctx.clearRect(0,0,canvas.width,canvas.height),800)
+}
+
+let questions=[
+
+["Nhiệm vụ của Trung là gì?",["Tạo bài trình chiếu","Đọc sách","Vẽ tranh","Chơi"],0],
+["Nhiệm vụ của Mai là gì?",["Thuyết trình","Vẽ tranh","Đóng máy","Viết bài"],0],
+["Trung lấy nội dung từ đâu?",["SGK Tin học lớp 3","Internet","Bạn bè","Bảng"],0],
+["Mai lấy bài trình chiếu ở đâu?",["Từ Trung","Internet","Sách","Cô giáo"],0],
+
+["Nhiệm vụ lớn có thể chia thành gì?",["Các nhiệm vụ nhỏ","Không chia","Một nhiệm vụ","Không cần"],0],
+
+["Việc nào cần sự trợ giúp của máy tính?",["Tạo bài trình chiếu","Nói chuyện","Nghe","Chạy"],0],
+
+["Phần mềm RapidTyping dùng để?",["Luyện gõ bàn phím","Vẽ","Xem phim","Chơi"],0],
+
+["Basic Mouse Skills dùng để?",["Luyện chuột","Vẽ","Nghe nhạc","In"],0],
+
+["Một nhiệm vụ gồm những phần nào?",["Những gì đã có và sản phẩm","Chỉ sản phẩm","Chỉ người","Không gì"],0],
+
+["Ví dụ nhiệm vụ của Huy?",["Tạo bài trình chiếu","Ngủ","Chạy","Ăn"],0],
+
+["Những gì đã có trước của Huy?",["Sách vở trong thư viện","Bảng","Chuột","Màn hình"],0],
+
+["Sản phẩm cần tạo ra?",["Bài trình chiếu","Bài viết","Bức tranh","Bài hát"],0]
+
+]
+
+while(questions.length<70){
+questions.push(...questions.slice(0,10))
+}
+
+questions=questions.slice(0,70)
+
+questions.sort(()=>Math.random()-0.5)
+
+let current=0
+let score=0
+let time=20
+let timer
+
+function shuffle(arr){
+return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1])
+}
+
+function begin(){
+start.style.display="none"
+quiz.style.display="block"
+loadQuestion()
+}
+
+function loadQuestion(){
+
+if(current>=questions.length){
+finish()
+return
+}
+
+bar.style.width=(current/questions.length*100)+"%"
+
+question.innerText="Câu "+(current+1)+": "+questions[current][0]
+
+remain.innerText="Còn "+(questions.length-current)+" câu"
+
+let answersData=[...questions[current][1]].map((a,i)=>({text:a,index:i}))
+answersData=shuffle(answersData)
+
+answers.innerHTML=""
+correctBox.innerHTML=""
+
+answersData.forEach((a,k)=>{
+answers.innerHTML+=`<div class="answer a${k}" onclick="selectAnswer(${a.index})">${a.text}</div>`
+})
+
+startTimer()
+
+}
+
+function startTimer(){
+
+clearInterval(timer)
+time=20
+timeEl.innerText=time
+
+timer=setInterval(()=>{
+time--
+timeEl.innerText=time
+
+if(time<=0){
+clearInterval(timer)
+showAnswer(null)
+}
+
+},1000)
+
+}
+
+const timeEl=document.getElementById("time")
+
+function selectAnswer(index){
+clearInterval(timer)
+showAnswer(index)
+}
+
+function showAnswer(index){
+
+let correct=questions[current][2]
+let correctText=questions[current][1][correct]
+
+document.querySelectorAll(".answer").forEach(el=>{
+if(el.innerText===correctText) el.classList.add("zoomCorrect")
+else el.classList.add("zoomWrong")
+})
+
+if(index===correct) score++
+
+correctBox.innerText="👉 Câu trả lời đúng là: "+correctText
+
+setTimeout(()=>{
+current++
+loadQuestion()
+},1500)
+
+}
+
+function finish(){
+
+quiz.style.display="none"
+end.style.display="block"
+
+let n=name.value||"HS"
+let c=cls.value||""
+
+result.innerText=n+" ("+c+") đạt "+score+"/70 điểm"
+
+fireworks()
+
+let board=JSON.parse(localStorage.board||"[]")
+board.push({name:n,cls:c,score})
+
+board.sort((a,b)=>b.score-a.score)
+board=board.slice(0,10)
+
+localStorage.board=JSON.stringify(board)
+
+let html="<tr><th>Hạng</th><th>Tên</th><th>Lớp</th><th>Điểm</th></tr>"
+
+board.forEach((b,i)=>{
+html+=`<tr><td>${i+1}</td><td>${b.name}</td><td>${b.cls}</td><td>${b.score}</td></tr>`
+})
+
+leaderboard.innerHTML=html
+}
+
+</script>
+
+</body>
+</html>
