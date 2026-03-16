@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Thực hành 30 phút - Máy tính những người bạn mới</title>
+
+<style>
+
+body{
+font-family:"Comic Sans MS", Arial;
+background:linear-gradient(135deg,#a1c4fd,#c2e9fb);
+padding:20px;
+}
+
+.container{
+background:white;
+max-width:1000px;
+margin:auto;
+padding:25px;
+border-radius:20px;
+box-shadow:0 0 20px rgba(0,0,0,0.25);
+}
+
+h1{
+text-align:center;
+color:#1976d2;
+}
+
+.timer{
+text-align:right;
+font-size:20px;
+color:red;
+font-weight:bold;
+}
+
+.section{
+background:#f5faff;
+margin:15px 0;
+padding:15px;
+border-left:8px solid #4caf50;
+border-radius:15px;
+}
+
+details{
+margin:10px 0;
+background:#fff3e0;
+padding:12px;
+border-radius:10px;
+}
+
+summary{
+font-weight:bold;
+cursor:pointer;
+font-size:18px;
+color:#1565c0;
+}
+
+ul{
+margin-left:25px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>💻 THỰC HÀNH 30 PHÚT – MÁY TÍNH NHỮNG NGƯỜI BẠN MỚI</h1>
+
+<div class="timer">
+⏳ Thời gian còn lại: <span id="time">30:00</span>
+</div>
+
+<div class="section">
+
+<h2>1️⃣ Khởi động</h2>
+
+<details>
+<summary>▶ Quan sát và trả lời</summary>
+
+<ul>
+<li>Quan sát các loại máy tính.</li>
+<li>Kể tên những máy tính em đã từng thấy.</li>
+<li>Thảo luận hình dạng của từng loại máy.</li>
+</ul>
+
+</details>
+
+</div>
+
+<div class="section">
+
+<h2>2️⃣ Một số máy tính thông dụng</h2>
+
+<details>
+<summary>▶ Nhấn để xem</summary>
+
+<ul>
+<li>Máy tính để bàn</li>
+<li>Máy tính xách tay</li>
+<li>Máy tính bảng</li>
+<li>Điện thoại thông minh</li>
+</ul>
+
+</details>
+
+</div>
+
+<div class="section">
+
+<h2>3️⃣ Các bộ phận cơ bản</h2>
+
+<details>
+<summary>▶ Các bộ phận của máy tính</summary>
+
+<ul>
+<li>Màn hình</li>
+<li>Thân máy</li>
+<li>Bàn phím</li>
+<li>Chuột</li>
+</ul>
+
+</details>
+
+</div>
+
+<div class="section">
+
+<h2>4️⃣ Chức năng của các bộ phận</h2>
+
+<details>
+<summary>▶ Nhấn để xem</summary>
+
+<ul>
+
+<li>Bàn phím → gõ thông tin vào máy.</li>
+<li>Chuột → ra lệnh cho máy tính.</li>
+<li>Màn hình → hiển thị thông tin.</li>
+<li>Loa → phát âm thanh.</li>
+
+</ul>
+
+</details>
+
+</div>
+
+<div class="section">
+
+<h2>5️⃣ Thiết bị vào và thiết bị ra</h2>
+
+<details>
+<summary>▶ Nội dung</summary>
+
+<ul>
+
+<li>Thiết bị vào: bàn phím, chuột.</li>
+<li>Thiết bị ra: màn hình, loa.</li>
+<li>Màn hình cảm ứng: vừa vào vừa ra.</li>
+
+</ul>
+
+</details>
+
+</div>
+
+<div class="section">
+
+<h2>🎯 Bài luyện tập</h2>
+
+<details>
+<summary>▶ Bài tập</summary>
+
+<ul>
+
+<li>Phân loại các loại máy tính.</li>
+<li>Xác định thiết bị vào.</li>
+<li>Xác định thiết bị ra.</li>
+
+</ul>
+
+</details>
+
+</div>
+
+</div>
+
+<script>
+
+let time=1800;
+
+setInterval(function(){
+
+let m=Math.floor(time/60);
+let s=time%60;
+
+document.getElementById("time").innerHTML=
+m+":"+(s<10?"0"+s:s);
+
+if(time>0) time--;
+
+},1000);
+
+</script>
+
+</body>
+</html>
