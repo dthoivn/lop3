@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Thực hành 30 phút - Xem tin và giải trí trên Internet</title>
+
+<style>
+
+body{
+font-family:"Comic Sans MS", Arial;
+background:linear-gradient(135deg,#fbc2eb,#a6c1ee);
+padding:20px;
+}
+
+.container{
+background:white;
+max-width:1000px;
+margin:auto;
+padding:25px;
+border-radius:20px;
+box-shadow:0 0 20px rgba(0,0,0,0.25);
+}
+
+h1{
+text-align:center;
+color:#673ab7;
+}
+
+.timer{
+text-align:right;
+font-size:20px;
+color:red;
+font-weight:bold;
+}
+
+.section{
+background:#f5faff;
+margin:15px 0;
+padding:15px;
+border-left:8px solid #4caf50;
+border-radius:15px;
+}
+
+details{
+margin:10px 0;
+background:#fff3e0;
+padding:12px;
+border-radius:10px;
+}
+
+summary{
+font-weight:bold;
+cursor:pointer;
+font-size:18px;
+color:#1565c0;
+}
+
+ul{
+margin-left:25px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🌐 THỰC HÀNH 30 PHÚT – XEM TIN VÀ GIẢI TRÍ TRÊN INTERNET</h1>
+
+<div class="timer">
+⏳ Thời gian còn lại: <span id="time">30:00</span>
+</div>
+
+<div class="section">
+
+<h2>1️⃣ Khởi động</h2>
+
+<details>
+<summary>▶ Quan sát và thảo luận</summary>
+
+<ul>
+<li>Máy tính kết nối Internet có thể làm gì?</li>
+<li>Xem thời tiết.</li>
+<li>Nghe nhạc.</li>
+<li>Xem phim hoạt hình.</li>
+<li>Đọc tin tức.</li>
+</ul>
+
+</details>
+
+</div>
+
+<div class="section">
+
+<h2>2️⃣ Xem thông tin trên Internet</h2>
+
+<details>
+<summary>▶ Các bước xem thời tiết</summary>
+
+<ul>
+
+<li>Bước 1: Mở trình duyệt web.</li>
+<li>Bước 2: Gõ địa chỉ trang web thời tiết.</li>
+<li>Bước 3: Nhấn Enter.</li>
+<li>Bước 4: Xem thông tin thời tiết địa phương.</li>
+
+</ul>
+
+</details>
+
+</div>
+
+<div class="section">
+
+<h2>3️⃣ Nghe nhạc thiếu nhi</h2>
+
+<details>
+<summary>▶ Các bước thực hiện</summary>
+
+<ul>
+
+<li>Mở trình duyệt web.</li>
+<li>Truy cập trang web nghe nhạc thiếu nhi.</li>
+<li>Chọn mục bài hát.</li>
+<li>Nháy nút Play để nghe.</li>
+
+</ul>
+
+</details>
+
+</div>
+
+<div class="section">
+
+<h2>4️⃣ Internet là kho thông tin</h2>
+
+<details>
+<summary>▶ Nội dung</summary>
+
+<ul>
+
+<li>Internet có rất nhiều thông tin.</li>
+<li>Có thể tìm:</li>
+
+<li>• Thời tiết</li>
+<li>• Tin tức</li>
+<li>• Hình ảnh</li>
+<li>• Video</li>
+
+</ul>
+
+</details>
+
+</div>
+
+<div class="section">
+
+<h2>5️⃣ Thông tin phù hợp</h2>
+
+<details>
+<summary>▶ Lưu ý</summary>
+
+<ul>
+
+<li>Không phải thông tin nào cũng phù hợp.</li>
+<li>Tránh xem nội dung bạo lực.</li>
+<li>Nên có sự hướng dẫn của bố mẹ, thầy cô.</li>
+
+</ul>
+
+</details>
+
+</div>
+
+<div class="section">
+
+<h2>🎯 Luyện tập</h2>
+
+<details>
+<summary>▶ Câu hỏi</summary>
+
+<ul>
+
+<li>Internet giúp em làm được những việc gì?</li>
+<li>Nêu ví dụ thông tin em có thể tìm trên Internet.</li>
+
+</ul>
+
+</details>
+
+</div>
+
+</div>
+
+<script>
+
+let time=1800;
+
+setInterval(function(){
+
+let m=Math.floor(time/60);
+let s=time%60;
+
+document.getElementById("time").innerHTML=
+m+":"+(s<10?"0"+s:s);
+
+if(time>0) time--;
+
+},1000);
+
+</script>
+
+</body>
+</html>
