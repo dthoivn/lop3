@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Classroom PRO</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+font-family:Arial;
+background:#eef4ff;
+margin:0;
+text-align:center
+}
+
+.card{
+max-width:900px;
+margin:auto;
+margin-top:20px;
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,.15)
+}
+
+input{
+padding:10px;
+font-size:16px;
+border-radius:8px;
+border:1px solid #ccc;
+width:220px
+}
+
+.answers{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+margin-top:20px
+}
+
+.answer{
+padding:18px;
+border-radius:12px;
+font-size:18px;
+cursor:pointer;
+transition:.25s;
+font-weight:bold
+}
+
+.answer:hover{
+transform:scale(1.05)
+}
+
+.a0{background:#ff7675}
+.a1{background:#74b9ff}
+.a2{background:#ffeaa7}
+.a3{background:#55efc4}
+
+.correct{
+background:#2ecc71!important;
+transform:scale(1.15)
+}
+
+.wrong{
+opacity:.3
+}
+
+.timer{
+font-size:24px;
+color:#e74c3c;
+font-weight:bold
+}
+
+#progressBar{
+width:100%;
+height:12px;
+background:#ddd;
+border-radius:10px;
+margin-top:15px;
+overflow:hidden
+}
+
+#progress{
+height:100%;
+width:0%;
+background:#2ecc71
+}
+
+button{
+padding:12px 25px;
+font-size:16px;
+border:none;
+border-radius:10px;
+background:#0984e3;
+color:white;
+cursor:pointer
+}
+
+button:hover{
+background:#0652dd
+}
+
+canvas{
+max-width:300px;
+margin-top:20px
+}
+
+/* mobile */
+
+@media(max-width:600px){
+
+.answers{
+grid-template-columns:1fr
+}
+
+.answer{
+font-size:16px
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Quiz Tin học 3 - Bài 2 - Xử lý thông tin</h2>
+
+<input id="name" placeholder="Họ tên học sinh">
+<br><br>
+
+<input id="class" placeholder="Lớp">
+<br><br>
+
+<button onclick="start()">BẮT ĐẦU</button>
+
+<div id="quiz" style="display:none">
+
+<div class="timer" id="time">30:00</div>
+
+<div id="progressBar">
+<div id="progress"></div>
+</div>
+
+<h3 id="question"></h3>
+
+<div class="answers" id="answers"></div>
+
+<div id="correctText"></div>
+
+</div>
+
+<div id="result"></div>
+
+<canvas id="chart"></canvas>
+
+</div>
+
+<audio id="correctSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5b0f4d2c03.mp3"></audio>
+<audio id="wrongSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_0d30a3c0d2.mp3"></audio>
+
+<script>
+
+let studentName=""
+let studentClass=""
+
+let questions=[
+
+["Thông tin thường có những dạng nào?",["Chữ, hình ảnh, âm thanh","Video, ảnh, nhạc","Game, ảnh, chữ","Âm thanh, video"],0],
+["Thông tin dạng chữ là gì?",["Thông tin có thể đọc được","Thông tin nghe được","Thông tin nhìn thấy","Thông tin cảm nhận"],0],
+["Thông tin dạng hình ảnh là gì?",["Thông tin có thể nhìn thấy","Thông tin nghe được","Thông tin đọc được","Thông tin ngửi được"],0],
+["Thông tin dạng âm thanh là gì?",["Thông tin có thể nghe thấy","Thông tin nhìn thấy","Thông tin đọc được","Thông tin ngửi được"],0],
+["Trong lớp học giáo viên truyền đạt thông tin bằng gì?",["Chữ, hình ảnh, âm thanh","Chỉ chữ","Chỉ âm thanh","Chỉ hình"],0],
+
+["Trên tivi thông tin thời tiết có thể ở dạng nào?",["Chữ, hình ảnh, âm thanh","Chỉ chữ","Chỉ hình","Chỉ âm thanh"],0],
+["Thông tin 'trời mưa' có thể thể hiện bằng gì?",["Hình ảnh mưa","Âm thanh nhạc","Video game","Trò chơi"],0],
+["Khi đọc sách em nhận thông tin bằng gì?",["Mắt","Tai","Mũi","Tay"],0],
+["Khi nghe chuông em nhận thông tin bằng gì?",["Tai","Mắt","Mũi","Miệng"],0],
+["Khi nhìn biển báo giao thông em nhận thông tin bằng gì?",["Mắt","Tai","Mũi","Miệng"],0],
+
+["Con người xử lí thông tin bằng bộ phận nào?",["Bộ não","Tay","Chân","Mắt"],0],
+["Bộ não giúp con người làm gì?",["Xử lí thông tin","Chạy nhanh","Nghe nhạc","Chơi game"],0],
+["Ví dụ xử lí thông tin là gì?",["Tính toán phép cộng","Nghe nhạc","Xem phim","Chơi game"],0],
+["Trong ví dụ 25 + 17 học sinh phải làm gì?",["Thực hiện phép tính","Nghe nhạc","Xem phim","Chơi game"],0],
+["Kết quả phép tính do bộ phận nào xử lí?",["Bộ não","Tay","Chân","Mắt"],0],
+
+["Khi xem dự báo trời lạnh bạn học sinh làm gì?",["Mặc áo ấm","Đi ngủ","Chơi game","Chạy"],0],
+["Thông tin trời lạnh được nhận từ đâu?",["Tivi","Chuột","Bàn phím","Máy in"],0],
+["Quyết định mặc áo ấm do đâu?",["Xử lí thông tin","Âm thanh","Hình ảnh","Trò chơi"],0],
+["Trong giao thông thông tin đèn đỏ là gì?",["Tín hiệu dừng","Tín hiệu đi","Tín hiệu rẽ","Tín hiệu chạy"],0],
+["Khi thấy đèn đỏ người tham gia giao thông làm gì?",["Dừng xe","Đi tiếp","Chạy nhanh","Rẽ trái"],0],
+
+["Ai xử lí thông tin đèn đỏ?",["Bộ não","Chân","Tay","Mắt"],0],
+["Máy móc có thể làm gì với thông tin?",["Tiếp nhận và xử lí","Chỉ nghe","Chỉ nhìn","Chỉ đọc"],0],
+["Khi bấm nút bật tivi điều gì xảy ra?",["Tivi bật","Tivi tắt","Máy in chạy","Quạt quay"],0],
+["Thông tin tivi nhận là gì?",["Nút bật được bấm","Âm thanh","Hình ảnh","Màu sắc"],0],
+["Kết quả xử lí của tivi là gì?",["Tivi bật","Tivi tắt","Không đổi","Máy tắt"],0],
+
+["Khi bấm nút Play trên máy tính thì sao?",["Phát bài hát","Tắt máy","Xóa file","In tài liệu"],0],
+["Thông tin máy tính nhận là gì?",["Nút Play được chọn","Chuột","Bàn phím","Màn hình"],0],
+["Kết quả xử lí thông tin của máy tính là gì?",["Phát nhạc","Tắt máy","Xóa file","In"],0],
+["Máy giặt nhận thông tin gì?",["Nút bấm","Âm thanh","Hình ảnh","Video"],0],
+["Sau khi nhận thông tin máy giặt làm gì?",["Giặt quần áo","Phát nhạc","In tài liệu","Tắt máy"],0],
+
+["Nồi cơm điện nhận thông tin gì?",["Nút bấm","Âm thanh","Hình ảnh","Video"],0],
+["Sau khi nhận thông tin nồi cơm làm gì?",["Nấu cơm","Phát nhạc","Xóa file","In"],0],
+["Quạt điện nhận thông tin gì?",["Nút bấm","Hình ảnh","Âm thanh","Video"],0],
+["Sau khi nhận thông tin quạt điện làm gì?",["Quay","In","Phát nhạc","Xóa"],0],
+["Máy móc tiếp nhận thông tin để làm gì?",["Quyết định hành động","Nghe nhạc","Chơi game","Xem phim"],0],
+
+["Thông tin việt vị trong bóng đá có thể ở dạng gì?",["Hình ảnh","Âm thanh","Chữ","Tất cả"],3],
+["Tiếng còi trọng tài là dạng thông tin gì?",["Âm thanh","Chữ","Hình ảnh","Video"],0],
+["Bảng điện tử hiển thị thời gian là dạng gì?",["Chữ hoặc số","Âm thanh","Hình ảnh","Video"],0],
+["Khi học sinh nghe câu hỏi của giáo viên thì thông tin ở dạng gì?",["Âm thanh","Chữ","Hình ảnh","Video"],0],
+["Câu trả lời của học sinh là gì?",["Kết quả xử lí thông tin","Thông tin mới","Âm thanh","Hình ảnh"],0],
+
+["Bộ phận nào xử lí câu trả lời của học sinh?",["Bộ não","Tai","Mắt","Miệng"],0],
+["Thông tin giúp con người làm gì?",["Ra quyết định","Chơi game","Nghe nhạc","Xem phim"],0],
+["Nếu không có thông tin thì sao?",["Khó quyết định","Dễ chơi game","Nghe nhạc","Xem phim"],0],
+["Thông tin có vai trò gì?",["Rất quan trọng","Không quan trọng","Không cần","Ít"],0],
+["Bài 2 dạy học sinh điều gì?",["Xử lí thông tin","Chơi game","Nghe nhạc","Vẽ hình"],0]
+
+];
+
+questions.sort(()=>Math.random()-0.5)
+
+let current=0
+let correctCount=0
+let wrongCount=0
+let totalTime=1800
+let timer
+
+function start(){
+
+studentName=document.getElementById("name").value.trim()
+studentClass=document.getElementById("class").value.trim()
+
+if(studentName==""||studentClass==""){
+alert("Nhập tên và lớp")
+return
+}
+
+quiz.style.display="block"
+
+startTimer()
+
+load()
+
+}
+
+function startTimer(){
+
+timer=setInterval(()=>{
+
+totalTime--
+
+let m=Math.floor(totalTime/60)
+let s=totalTime%60
+
+time.innerText=
+String(m).padStart(2,'0')+":"+
+String(s).padStart(2,'0')
+
+if(totalTime<=0){
+finish()
+}
+
+},1000)
+
+}
+
+function load(){
+
+correctText.innerText=""
+
+progress.style.width=(current/questions.length*100)+"%"
+
+question.innerText="Câu "+(current+1)+": "+questions[current][0]
+
+let ans=questions[current][1]
+.map((a,i)=>({t:a,i}))
+.sort(()=>Math.random()-0.5)
+
+answers.innerHTML=""
+
+ans.forEach((a,k)=>{
+
+answers.innerHTML+=
+`<div class="answer a${k}" onclick="choose(${a.i})">${a.t}</div>`
+
+})
+
+}
+
+function choose(i){
+
+let correct=questions[current][2]
+let correctAns=questions[current][1][correct]
+
+document.querySelectorAll(".answer").forEach(el=>{
+
+if(el.innerText===correctAns)
+el.classList.add("correct")
+else
+el.classList.add("wrong")
+
+})
+
+if(i===correct){
+correctCount++
+correctSound.play()
+}else{
+wrongCount++
+wrongSound.play()
+}
+
+correctText.innerText="Đáp án đúng: "+correctAns
+
+setTimeout(()=>{
+
+current++
+
+if(current<questions.length){
+load()
+}else{
+finish()
+}
+
+},1200)
+
+}
+
+function finish(){
+
+clearInterval(timer)
+
+quiz.style.display="none"
+
+let total=questions.length
+let percent=Math.round(correctCount/total*100)
+
+let grade=""
+
+if(percent>=80) grade="Giỏi"
+else if(percent>=65) grade="Khá"
+else if(percent>=50) grade="Trung bình"
+else grade="Cần cố gắng"
+
+result.innerHTML=
+
+"<h2>Hoàn thành bài</h2>"+
+"<p>Học sinh: "+studentName+"</p>"+
+"<p>Lớp: "+studentClass+"</p>"+
+"<h3>Đúng: "+correctCount+"</h3>"+
+"<h3>Sai: "+wrongCount+"</h3>"+
+"<h3>Tỷ lệ: "+percent+"%</h3>"+
+"<h3>Xếp loại: "+grade+"</h3>"+
+"<br><button onclick='location.reload()'>Làm lại bài</button>"
+
+drawChart()
+
+}
+
+function drawChart(){
+
+let c=document.getElementById("chart")
+let ctx=c.getContext("2d")
+
+let total=correctCount+wrongCount
+
+let correctAngle=(correctCount/total)*2*Math.PI
+
+ctx.clearRect(0,0,300,300)
+
+ctx.beginPath()
+ctx.moveTo(150,150)
+ctx.arc(150,150,120,0,correctAngle)
+ctx.fillStyle="#2ecc71"
+ctx.fill()
+
+ctx.beginPath()
+ctx.moveTo(150,150)
+ctx.arc(150,150,120,correctAngle,2*Math.PI)
+ctx.fillStyle="#e74c3c"
+ctx.fill()
+
+}
+
+</script>
+
+</body>
+</html>
