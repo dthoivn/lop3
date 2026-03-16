@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Thực hành 30 phút - Làm việc với máy tính</title>
+
+<style>
+
+body{
+font-family:"Comic Sans MS", Arial;
+background:linear-gradient(135deg,#ffecd2,#fcb69f);
+padding:20px;
+}
+
+.container{
+background:white;
+max-width:1000px;
+margin:auto;
+padding:25px;
+border-radius:20px;
+box-shadow:0 0 20px rgba(0,0,0,0.25);
+}
+
+h1{
+text-align:center;
+color:#ff5722;
+}
+
+.timer{
+text-align:right;
+font-size:20px;
+color:red;
+font-weight:bold;
+}
+
+.section{
+background:#f5faff;
+margin:15px 0;
+padding:15px;
+border-left:8px solid #4caf50;
+border-radius:15px;
+}
+
+details{
+margin:10px 0;
+background:#fff3e0;
+padding:12px;
+border-radius:10px;
+}
+
+summary{
+font-weight:bold;
+cursor:pointer;
+font-size:18px;
+color:#1565c0;
+}
+
+ul{
+margin-left:25px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🖱️ THỰC HÀNH 30 PHÚT – LÀM VIỆC VỚI MÁY TÍNH</h1>
+
+<div class="timer">
+⏳ Thời gian còn lại: <span id="time">30:00</span>
+</div>
+
+<div class="section">
+
+<h2>1️⃣ Khởi động máy tính</h2>
+
+<details>
+<summary>▶ Các bước</summary>
+
+<ul>
+
+<li>Bấm nút nguồn trên thân máy.</li>
+<li>Chờ máy khởi động.</li>
+<li>Màn hình hiển thị giao diện làm việc.</li>
+
+</ul>
+
+</details>
+
+</div>
+
+<div class="section">
+
+<h2>2️⃣ Sử dụng chuột máy tính</h2>
+
+<details>
+<summary>▶ Nội dung</summary>
+
+<ul>
+
+<li>Nút trái</li>
+<li>Nút phải</li>
+<li>Nút cuộn</li>
+
+<li>Các thao tác:</li>
+
+<li>• Di chuyển chuột</li>
+<li>• Nháy chuột</li>
+<li>• Nháy đúp chuột</li>
+<li>• Nháy chuột phải</li>
+<li>• Kéo thả chuột</li>
+
+</ul>
+
+</details>
+
+</div>
+
+<div class="section">
+
+<h2>3️⃣ Cách cầm chuột</h2>
+
+<details>
+<summary>▶ Hướng dẫn</summary>
+
+<ul>
+
+<li>Cầm chuột bằng tay phải.</li>
+<li>Ngón trỏ đặt nút trái.</li>
+<li>Ngón giữa đặt nút phải.</li>
+<li>Các ngón còn lại giữ hai bên chuột.</li>
+
+</ul>
+
+</details>
+
+</div>
+
+<div class="section">
+
+<h2>4️⃣ Tắt máy tính</h2>
+
+<details>
+<summary>▶ Các bước</summary>
+
+<ul>
+
+<li>Bước 1: Nháy nút Start.</li>
+<li>Bước 2: Nháy Power.</li>
+<li>Bước 3: Chọn Shut down.</li>
+<li>Bước 4: Đợi máy tắt hoàn toàn.</li>
+
+</ul>
+
+</details>
+
+</div>
+
+<div class="section">
+
+<h2>5️⃣ Tư thế ngồi đúng</h2>
+
+<details>
+<summary>▶ Nội dung</summary>
+
+<ul>
+
+<li>Ngồi thẳng lưng.</li>
+<li>Mắt cách màn hình khoảng 50–70 cm.</li>
+<li>Không làm việc với máy quá 30 phút liên tục.</li>
+
+</ul>
+
+</details>
+
+</div>
+
+<div class="section">
+
+<h2>6️⃣ An toàn điện</h2>
+
+<details>
+<summary>▶ Lưu ý</summary>
+
+<ul>
+
+<li>Không dùng tay ướt chạm vào máy.</li>
+<li>Không giẫm lên dây điện.</li>
+<li>Không để nước gần máy tính.</li>
+<li>Không chạm dây điện hở.</li>
+
+</ul>
+
+</details>
+
+</div>
+
+</div>
+
+<script>
+
+let time=1800;
+
+setInterval(function(){
+
+let m=Math.floor(time/60);
+let s=time%60;
+
+document.getElementById("time").innerHTML=
+m+":"+(s<10?"0"+s:s);
+
+if(time>0) time--;
+
+},1000);
+
+</script>
+
+</body>
+</html>
