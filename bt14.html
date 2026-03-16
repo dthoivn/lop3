@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Thực hành 30 phút - Thực hiện công việc theo điều kiện</title>
+
+<style>
+
+body{
+font-family:"Comic Sans MS", Arial;
+background:linear-gradient(135deg,#84fab0,#8fd3f4);
+padding:20px;
+}
+
+.container{
+background:white;
+max-width:1000px;
+margin:auto;
+padding:25px;
+border-radius:20px;
+box-shadow:0 0 20px rgba(0,0,0,0.25);
+}
+
+h1{
+text-align:center;
+color:#2e7d32;
+}
+
+.timer{
+text-align:right;
+font-size:20px;
+color:red;
+font-weight:bold;
+}
+
+.section{
+background:#f5faff;
+margin:15px 0;
+padding:15px;
+border-left:8px solid #4caf50;
+border-radius:15px;
+}
+
+details{
+margin:10px 0;
+background:#fff3e0;
+padding:12px;
+border-radius:10px;
+}
+
+summary{
+font-weight:bold;
+cursor:pointer;
+font-size:18px;
+color:#1565c0;
+}
+
+ul{
+margin-left:25px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>⚙️ THỰC HÀNH 30 PHÚT – THỰC HIỆN CÔNG VIỆC THEO ĐIỀU KIỆN</h1>
+
+<div class="timer">
+⏳ Thời gian còn lại: <span id="time">30:00</span>
+</div>
+
+<div class="section">
+
+<h2>1️⃣ Ví dụ điều kiện</h2>
+
+<details>
+<summary>▶ Ví dụ</summary>
+
+<ul>
+<li>Nếu trời nắng thì mang mũ.</li>
+<li>Nếu trời mưa thì mang áo mưa.</li>
+</ul>
+
+</details>
+
+</div>
+
+<div class="section">
+
+<h2>2️⃣ Khám phá</h2>
+
+<details>
+<summary>▶ Cấu trúc</summary>
+
+<ul>
+<li>Nếu + điều kiện.</li>
+<li>Thì + hành động.</li>
+</ul>
+
+</details>
+
+</div>
+
+<div class="section">
+
+<h2>🎯 Luyện tập</h2>
+
+<details>
+<summary>▶ Ví dụ</summary>
+
+<ul>
+<li>Nếu có tiết thể dục thì mặc đồng phục thể thao.</li>
+<li>Nếu cô giáo giảng bài thì lắng nghe.</li>
+</ul>
+
+</details>
+
+</div>
+
+</div>
+
+<script>
+let time=1800;
+setInterval(function(){
+let m=Math.floor(time/60);
+let s=time%60;
+document.getElementById("time").innerHTML=m+":"+(s<10?"0"+s:s);
+if(time>0) time--;
+},1000);
+</script>
+
+</body>
+</html>
