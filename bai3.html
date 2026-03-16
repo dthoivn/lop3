@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Classroom PRO</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+font-family:Arial;
+background:#eef4ff;
+margin:0;
+text-align:center
+}
+
+.card{
+max-width:900px;
+margin:auto;
+margin-top:20px;
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,.15)
+}
+
+input{
+padding:10px;
+font-size:16px;
+border-radius:8px;
+border:1px solid #ccc;
+width:220px
+}
+
+.answers{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+margin-top:20px
+}
+
+.answer{
+padding:18px;
+border-radius:12px;
+font-size:18px;
+cursor:pointer;
+transition:.25s;
+font-weight:bold
+}
+
+.answer:hover{
+transform:scale(1.05)
+}
+
+.a0{background:#ff7675}
+.a1{background:#74b9ff}
+.a2{background:#ffeaa7}
+.a3{background:#55efc4}
+
+.correct{
+background:#2ecc71!important;
+transform:scale(1.15)
+}
+
+.wrong{
+opacity:.3
+}
+
+.timer{
+font-size:24px;
+color:#e74c3c;
+font-weight:bold
+}
+
+#progressBar{
+width:100%;
+height:12px;
+background:#ddd;
+border-radius:10px;
+margin-top:15px;
+overflow:hidden
+}
+
+#progress{
+height:100%;
+width:0%;
+background:#2ecc71
+}
+
+button{
+padding:12px 25px;
+font-size:16px;
+border:none;
+border-radius:10px;
+background:#0984e3;
+color:white;
+cursor:pointer
+}
+
+button:hover{
+background:#0652dd
+}
+
+canvas{
+max-width:300px;
+margin-top:20px
+}
+
+/* mobile */
+
+@media(max-width:600px){
+
+.answers{
+grid-template-columns:1fr
+}
+
+.answer{
+font-size:16px
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Quiz Tin học 3 - Bài 3 - Máy tính và những người bạn</h2>
+
+<input id="name" placeholder="Họ tên học sinh">
+<br><br>
+
+<input id="class" placeholder="Lớp">
+<br><br>
+
+<button onclick="start()">BẮT ĐẦU</button>
+
+<div id="quiz" style="display:none">
+
+<div class="timer" id="time">30:00</div>
+
+<div id="progressBar">
+<div id="progress"></div>
+</div>
+
+<h3 id="question"></h3>
+
+<div class="answers" id="answers"></div>
+
+<div id="correctText"></div>
+
+</div>
+
+<div id="result"></div>
+
+<canvas id="chart"></canvas>
+
+</div>
+
+<audio id="correctSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5b0f4d2c03.mp3"></audio>
+<audio id="wrongSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_0d30a3c0d2.mp3"></audio>
+
+<script>
+
+let studentName=""
+let studentClass=""
+
+let questions=[
+
+["Có mấy loại máy tính thông dụng?",["4","2","3","5"],0],
+["Máy tính để bàn còn gọi là gì?",["Desktop","Laptop","Tablet","Smartphone"],0],
+["Máy tính xách tay còn gọi là gì?",["Laptop","Desktop","Tablet","Phone"],0],
+["Máy tính bảng còn gọi là gì?",["Tablet","Laptop","Desktop","Phone"],0],
+["Điện thoại thông minh còn gọi là gì?",["Smartphone","Laptop","Desktop","Tablet"],0],
+
+["Máy tính để bàn thường đặt ở đâu?",["Trên bàn làm việc","Trong túi","Trong cặp","Trong tay"],0],
+["Máy tính để bàn gồm những bộ phận nào?",["Thân máy, màn hình, bàn phím, chuột","Màn hình, loa","Chuột, loa","Màn hình, tai nghe"],0],
+["Thân máy kết nối với các bộ phận khác bằng gì?",["Dây cáp","Chuột","Bàn phím","Loa"],0],
+["Máy tính xách tay nhẹ hơn máy tính nào?",["Máy tính để bàn","Máy tính bảng","Điện thoại","Máy in"],0],
+["Máy tính xách tay có bàn phím gắn với gì?",["Thân máy","Màn hình","Chuột","Loa"],0],
+
+["Máy tính bảng có màn hình gì?",["Màn hình cảm ứng","Màn hình thường","Màn hình LED","Màn hình CRT"],0],
+["Máy tính bảng điều khiển bằng gì?",["Ngón tay","Chuột","Bàn phím","Bút chì"],0],
+["Máy tính bảng nhỏ hơn máy nào?",["Máy tính xách tay","Máy tính để bàn","Máy in","Máy chiếu"],0],
+["Điện thoại thông minh nhỏ hơn máy nào?",["Máy tính bảng","Máy tính xách tay","Máy tính để bàn","Máy in"],0],
+["Điện thoại thông minh điều khiển bằng gì?",["Chạm tay","Chuột","Bàn phím","Bút"],0],
+
+["Máy tính có mấy thành phần cơ bản?",["4","3","5","6"],0],
+["Các thành phần cơ bản của máy tính là gì?",["Màn hình, thân máy, bàn phím, chuột","Chuột, loa","Màn hình, loa","Bàn phím, loa"],0],
+["Bàn phím dùng để làm gì?",["Nhập thông tin","Phát âm thanh","Hiển thị hình ảnh","Lưu dữ liệu"],0],
+["Chuột máy tính dùng để làm gì?",["Ra lệnh cho máy tính","Phát âm thanh","Hiển thị chữ","In tài liệu"],0],
+["Màn hình dùng để làm gì?",["Hiển thị thông tin","Nhập dữ liệu","Phát nhạc","In tài liệu"],0],
+
+["Loa dùng để làm gì?",["Phát âm thanh","Nhập dữ liệu","Hiển thị chữ","In"],0],
+["Bàn phím và chuột gọi là gì?",["Thiết bị vào","Thiết bị ra","Thiết bị nhớ","Thiết bị lưu"],0],
+["Màn hình và loa gọi là gì?",["Thiết bị ra","Thiết bị vào","Thiết bị nhớ","Thiết bị lưu"],0],
+["Thiết bị vào dùng để làm gì?",["Nhập thông tin","Xuất thông tin","In dữ liệu","Lưu dữ liệu"],0],
+["Thiết bị ra dùng để làm gì?",["Đưa thông tin ra","Nhập dữ liệu","Xóa dữ liệu","Lưu dữ liệu"],0],
+
+["Khi viết thư bằng máy tính dùng bộ phận nào?",["Bàn phím","Chuột","Loa","Màn hình"],0],
+["Nội dung thư hiển thị ở đâu?",["Màn hình","Chuột","Bàn phím","Loa"],0],
+["Để phát nhạc cần dùng gì?",["Chuột","Bàn phím","Màn hình","Máy in"],0],
+["Âm thanh bài hát phát ra từ đâu?",["Loa","Màn hình","Chuột","Bàn phím"],0],
+["Nhập phép tính 7 + 5 dùng bộ phận nào?",["Bàn phím","Chuột","Loa","Màn hình"],0],
+
+["Kết quả phép tính hiển thị ở đâu?",["Màn hình","Chuột","Loa","Bàn phím"],0],
+["Màn hình cảm ứng có chức năng gì?",["Vừa vào vừa ra","Chỉ vào","Chỉ ra","Không chức năng"],0],
+["Màn hình cảm ứng có ở thiết bị nào?",["Điện thoại và máy tính bảng","Máy in","Máy chiếu","Máy quét"],0],
+["Khi chạm vào biểu tượng trên điện thoại nghĩa là gì?",["Nhập thông tin","Xuất thông tin","Xóa thông tin","In thông tin"],0],
+["Thông tin hiển thị trên điện thoại là gì?",["Thông tin ra","Thông tin vào","Thông tin xóa","Thông tin lưu"],0],
+
+["Chuột và bàn phím thuộc loại gì?",["Thiết bị vào","Thiết bị ra","Thiết bị nhớ","Thiết bị lưu"],0],
+["Loa và màn hình thuộc loại gì?",["Thiết bị ra","Thiết bị vào","Thiết bị nhớ","Thiết bị lưu"],0],
+["Máy tính bảng giống vật gì?",["Chiếc bảng con","Cuốn sách","Chiếc hộp","Cái quạt"],0],
+["Thiết bị nào dùng để nhập chữ?",["Bàn phím","Chuột","Màn hình","Loa"],0],
+["Thiết bị nào hiển thị hình ảnh?",["Màn hình","Chuột","Bàn phím","Loa"],0],
+
+["Thiết bị nào phát âm thanh?",["Loa","Màn hình","Chuột","Bàn phím"],0],
+["Thiết bị nào ra lệnh cho máy tính?",["Chuột","Bàn phím","Loa","Màn hình"],0],
+["Máy tính giúp con người làm gì?",["Xử lí thông tin","Ngủ","Chơi game","Nghe nhạc"],0],
+["Máy tính ngày nay được sử dụng ở đâu?",["Nhiều nơi","Chỉ trường học","Chỉ nhà","Chỉ công ty"],0],
+["Máy tính là gì đối với con người?",["Người bạn mới","Đồ chơi","Trò chơi","Nhạc cụ"],0],
+
+["Bài 3 dạy về điều gì?",["Máy tính và các bộ phận","Chơi game","Nghe nhạc","Vẽ hình"],0]
+
+];
+
+questions.sort(()=>Math.random()-0.5)
+
+let current=0
+let correctCount=0
+let wrongCount=0
+let totalTime=1800
+let timer
+
+function start(){
+
+studentName=document.getElementById("name").value.trim()
+studentClass=document.getElementById("class").value.trim()
+
+if(studentName==""||studentClass==""){
+alert("Nhập tên và lớp")
+return
+}
+
+quiz.style.display="block"
+
+startTimer()
+
+load()
+
+}
+
+function startTimer(){
+
+timer=setInterval(()=>{
+
+totalTime--
+
+let m=Math.floor(totalTime/60)
+let s=totalTime%60
+
+time.innerText=
+String(m).padStart(2,'0')+":"+
+String(s).padStart(2,'0')
+
+if(totalTime<=0){
+finish()
+}
+
+},1000)
+
+}
+
+function load(){
+
+correctText.innerText=""
+
+progress.style.width=(current/questions.length*100)+"%"
+
+question.innerText="Câu "+(current+1)+": "+questions[current][0]
+
+let ans=questions[current][1]
+.map((a,i)=>({t:a,i}))
+.sort(()=>Math.random()-0.5)
+
+answers.innerHTML=""
+
+ans.forEach((a,k)=>{
+
+answers.innerHTML+=
+`<div class="answer a${k}" onclick="choose(${a.i})">${a.t}</div>`
+
+})
+
+}
+
+function choose(i){
+
+let correct=questions[current][2]
+let correctAns=questions[current][1][correct]
+
+document.querySelectorAll(".answer").forEach(el=>{
+
+if(el.innerText===correctAns)
+el.classList.add("correct")
+else
+el.classList.add("wrong")
+
+})
+
+if(i===correct){
+correctCount++
+correctSound.play()
+}else{
+wrongCount++
+wrongSound.play()
+}
+
+correctText.innerText="Đáp án đúng: "+correctAns
+
+setTimeout(()=>{
+
+current++
+
+if(current<questions.length){
+load()
+}else{
+finish()
+}
+
+},1200)
+
+}
+
+function finish(){
+
+clearInterval(timer)
+
+quiz.style.display="none"
+
+let total=questions.length
+let percent=Math.round(correctCount/total*100)
+
+let grade=""
+
+if(percent>=80) grade="Giỏi"
+else if(percent>=65) grade="Khá"
+else if(percent>=50) grade="Trung bình"
+else grade="Cần cố gắng"
+
+result.innerHTML=
+
+"<h2>Hoàn thành bài</h2>"+
+"<p>Học sinh: "+studentName+"</p>"+
+"<p>Lớp: "+studentClass+"</p>"+
+"<h3>Đúng: "+correctCount+"</h3>"+
+"<h3>Sai: "+wrongCount+"</h3>"+
+"<h3>Tỷ lệ: "+percent+"%</h3>"+
+"<h3>Xếp loại: "+grade+"</h3>"+
+"<br><button onclick='location.reload()'>Làm lại bài</button>"
+
+drawChart()
+
+}
+
+function drawChart(){
+
+let c=document.getElementById("chart")
+let ctx=c.getContext("2d")
+
+let total=correctCount+wrongCount
+
+let correctAngle=(correctCount/total)*2*Math.PI
+
+ctx.clearRect(0,0,300,300)
+
+ctx.beginPath()
+ctx.moveTo(150,150)
+ctx.arc(150,150,120,0,correctAngle)
+ctx.fillStyle="#2ecc71"
+ctx.fill()
+
+ctx.beginPath()
+ctx.moveTo(150,150)
+ctx.arc(150,150,120,correctAngle,2*Math.PI)
+ctx.fillStyle="#e74c3c"
+ctx.fill()
+
+}
+
+</script>
+
+</body>
+</html>
