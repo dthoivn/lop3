@@ -97,31 +97,64 @@ ctx.fillRect(Math.random()*canvas.width,Math.random()*canvas.height,6,10)
 setTimeout(()=>ctx.clearRect(0,0,canvas.width,canvas.height),800)
 }
 
-let questions=[
+let questions = [
 
-["Thông tin cá nhân là gì?",["Thông tin về bản thân","Thông tin thời tiết","Tin tức","Bài hát"],0],
-["Ví dụ thông tin cá nhân?",["Tên và ngày sinh","Thời khóa biểu","Bài tập","Tranh"],0],
-["Ví dụ thông tin gia đình?",["Địa chỉ nhà","Bài tập","Bài hát","Bức tranh"],0],
+["Thông tin cá nhân là gì?",["Thông tin thời tiết","Thông tin về bản thân","Tin tức","Bài hát"],1],
+["Thông tin nào là thông tin cá nhân?",["Ảnh gia đình","Tên và ngày sinh","Tên trường","Bản đồ"],1],
+["Thông tin nào thuộc về gia đình?",["Địa chỉ nhà","Bài tập","Tin tức","Tranh"],0],
+["Thiết bị nào lưu trữ thông tin?",["Tivi","Máy tính","Quạt","Đèn"],1],
+["Điện thoại dùng để làm gì?",["Nấu ăn","Lưu trữ thông tin","Giặt đồ","Chơi thể thao"],1],
+["Ảnh của em là loại thông tin gì?",["Thông tin cá nhân","Thông tin công cộng","Tin tức","Không phải thông tin"],0],
+["Tên bố mẹ là thông tin gì?",["Thông tin trường học","Thông tin gia đình","Tin tức","Truyện"],1],
+["Không nên chia sẻ thông tin cho ai?",["Bạn bè","Người lạ","Thầy cô","Gia đình"],1],
+["Thông tin nào không phải cá nhân?",["Tên em","Ảnh em","Tên trường","Ngày sinh"],2],
+["Máy tính giúp gì?",["Chơi thể thao","Lưu trữ và trao đổi thông tin","Nấu ăn","Trồng cây"],1],
 
-["Thông tin cá nhân có thể lưu ở đâu?",["Máy tính","Bảng","Giấy","Sách"],0],
+["Ví dụ thông tin cá nhân?",["Bài hát","Tên và ngày sinh","Thời tiết","Tranh"],1],
+["Ví dụ thông tin gia đình?",["Bài tập","Ảnh gia đình","Truyện","Bài hát"],1],
+["Kẻ xấu biết thông tin từ đâu?",["Sách","Mạng xã hội","Trường học","Báo"],1],
+["Không nên làm gì với link lạ?",["Nhấp vào","Bỏ qua","Chia sẻ","Lưu lại"],0],
+["Mật khẩu không nên là gì?",["Số ngẫu nhiên","Ngày sinh","Chữ cái","Ký hiệu"],1],
+["Thông tin cá nhân dùng để làm gì?",["Giải trí","Nhận biết bản thân","Nấu ăn","Vẽ tranh"],1],
+["Gia đình đi du lịch đăng ảnh có thể gây gì?",["Niềm vui","Nguy hiểm","Học tốt","Chơi vui"],1],
+["Ai có thể lợi dụng thông tin?",["Bạn thân","Người lạ","Thầy cô","Cha mẹ"],1],
+["Không nên cung cấp gì?",["Đồ ăn","Thông tin cá nhân","Bài hát","Truyện"],1],
+["Thiết bị thông minh gồm?",["Xe đạp","Điện thoại","Bàn","Ghế"],1],
 
-["Thông tin có thể trao đổi bằng gì?",["Thư điện tử","Vẽ tranh","Hát","Nhảy"],0],
+["Thông tin nào cần bảo vệ?",["Tin tức","Thông tin cá nhân","Bài hát","Tranh"],1],
+["Ví dụ lưu trữ thông tin?",["Sách giấy","Máy tính bảng","Bảng đen","Phấn"],1],
+["Ví dụ trao đổi thông tin?",["Facebook","Sách","Bảng","Phấn"],0],
+["Thông tin học tập là gì?",["Tên","Điểm số","Địa chỉ","Ảnh"],1],
+["Ảnh gia đình thuộc loại gì?",["Công cộng","Gia đình","Trường học","Tin tức"],1],
+["Người lạ hỏi thông tin nên?",["Trả lời","Không trả lời","Viết ra","Đăng mạng"],1],
+["Mục đích bảo vệ thông tin?",["Chơi game","An toàn","Giải trí","Học bài"],1],
+["Thông tin bị lộ có thể?",["An toàn hơn","Bị lợi dụng","Học tốt","Vui hơn"],1],
+["Không nên chia sẻ gì?",["Địa chỉ","Truyện","Bài hát","Hình vẽ"],0],
+["Thông tin cá nhân gồm?",["Tên","Màu sắc","Âm nhạc","Thức ăn"],0],
 
-["Nếu dùng ngày sinh làm mật khẩu thì?",["Dễ bị đoán","An toàn","Nhanh","Đẹp"],0],
+["Thông tin gia đình gồm?",["Địa chỉ nhà","Bài hát","Truyện","Tin tức"],0],
+["Thiết bị nào không lưu trữ?",["Máy tính","Điện thoại","Quạt","Tablet"],2],
+["Trao đổi thông tin qua?",["Zalo","Sách","Bảng","Phấn"],0],
+["Nguy cơ khi lộ thông tin?",["Được khen","Bị trộm","Học giỏi","Chơi vui"],1],
+["Không nên đặt mật khẩu?",["Khó đoán","Dễ đoán","Dài","Có ký tự"],1],
+["Thông tin cá nhân có thể?",["Chia sẻ tùy ý","Bị lợi dụng","Không quan trọng","Luôn an toàn"],1],
+["Gia đình nên?",["Chia sẻ hết","Bảo vệ thông tin","Đăng tất cả","Không dùng mạng"],1],
+["Thông tin nào cần giữ kín?",["Tên trường","Số điện thoại","Màu sắc","Môn học"],1],
+["Kẻ xấu có thể?",["Giúp đỡ","Lừa đảo","Dạy học","Chơi game"],1],
+["Không nên làm gì online?",["Học","Chia sẻ thông tin cá nhân","Xem bài","Làm bài"],1],
 
-["Kẻ xấu có thể làm gì khi biết thông tin?",["Lừa đảo","Giúp đỡ","Học bài","Chơi"],0],
+["Thông tin cá nhân gồm?",["Ngày sinh","Bài hát","Truyện","Tin tức"],0],
+["Gia đình cần bảo vệ?",["Thông tin","Đồ ăn","Quần áo","Sách"],0],
+["Thiết bị lưu trữ?",["Máy tính","Ghế","Bàn","Quạt"],0],
+["Thông tin bị lộ sẽ?",["An toàn","Nguy hiểm","Không sao","Tốt hơn"],1],
+["Người lạ trên mạng?",["Tin tưởng","Cẩn thận","Kết bạn hết","Chia sẻ"],1],
+["Thông tin giúp gì?",["Nhận biết","Chơi game","Nấu ăn","Ngủ"],0],
+["Không nên đăng gì?",["Ảnh riêng","Bài học","Tin tức","Sách"],0],
+["Thông tin gia đình là?",["Ảnh gia đình","Tin tức","Bài hát","Truyện"],0],
+["Không nên cung cấp?",["Địa chỉ","Môn học","Tên trường","Bài hát"],0],
+["Bảo vệ thông tin để?",["An toàn","Giải trí","Chơi","Học ít"],0]
 
-["Có nên cung cấp thông tin cho người lạ?",["Không","Có","Luôn luôn","Thỉnh thoảng"],0],
-
-["Không nên nhấp vào gì?",["Link lạ","Bài học","Trang web trường","SGK"],0],
-
-["Thông tin cá nhân cần?",["Bảo vệ","Chia sẻ hết","Đưa cho người lạ","Bỏ"],0],
-
-["Ví dụ thông tin gia đình?",["Ảnh gia đình","Bài hát","Tranh","Bài toán"],0],
-
-["Nếu người lạ hỏi giờ vắng nhà?",["Không trả lời","Trả lời","Chia sẻ","Viết"],0]
-
-]
+];
 
 while(questions.length<70){
 questions.push(...questions.slice(0,10))
