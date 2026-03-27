@@ -81,12 +81,63 @@ stroke-dasharray="314" stroke-dashoffset="0" fill="none"/>
 
 <script>
 // ===== DANH SÁCH CÂU HỎI =====
-let questions=[
-['Trong máy tính có thể có gì?',['Nhiều ổ đĩa','Chỉ một ổ','Không có ổ','Chỉ thư mục'],0],
-['Trong ổ đĩa có thể chứa gì?',['Thư mục và tệp','Chỉ thư mục','Chỉ tệp','Không gì'],0],
-['Trong thư mục có thể chứa gì?',['Thư mục con và tệp','Chỉ tệp','Chỉ thư mục','Không gì'],0],
-['Thư mục gốc là tên gọi khác của gì?',['Ổ đĩa','Tệp','Chuột','Màn hình'],0],
-['Biểu tượng thư mục giống vật gì?',['Kẹp giấy màu vàng','Quyển sách','Cây bút','Con chuột'],0]
+let questions = [
+
+["Thư mục là gì?",["Nơi chứa tệp và thư mục con","Thiết bị lưu trữ","Một loại phần mềm","Một trò chơi"],0],
+["Ổ đĩa là gì?",["Thiết bị nhập","Nơi lưu trữ dữ liệu","Thiết bị xuất","Phần mềm"],1],
+["Ví dụ ổ đĩa?",["(C:)","Word","Chuột","Bàn phím"],0],
+["Trong ổ đĩa có gì?",["Chỉ có tệp","Chỉ có thư mục","Thư mục và tệp","Không có gì"],2],
+["Thư mục có thể chứa?",["Chỉ tệp","Thư mục con và tệp","Chỉ thư mục","Không gì"],1],
+["Biểu tượng thư mục giống gì?",["Quyển sách","Cái kẹp giấy màu vàng","Chiếc bút","Cái bàn"],1],
+["Thư mục gốc là gì?",["Thư mục nhỏ nhất","Ổ đĩa","Tệp lớn nhất","Thư mục con"],1],
+["Thư mục Gia sach là?",["Thư mục con","Thư mục mẹ","Tệp","Ổ đĩa"],1],
+["Thư mục con của Gia sach?",["Sach, Vo bai tap","C:, D:","Toan 3","Chuột"],0],
+["Tệp là gì?",["Thiết bị","Thông tin lưu trữ","Phần mềm","Thư mục"],1],
+
+["Ví dụ tệp?",["Toan 3","C:","D:","Gia sach"],0],
+["Cách mở thư mục?",["Nháy chuột","Gõ bàn phím","Chạm màn hình","Tắt máy"],0],
+["Khung trái hiển thị?",["Nội dung","Cây thư mục","Video","Âm thanh"],1],
+["Khung phải hiển thị?",["Cây thư mục","Nội dung thư mục","Ổ đĩa","Bàn phím"],1],
+["Cây thư mục là gì?",["Sơ đồ lưu trữ","Phần mềm","Thiết bị","Trò chơi"],0],
+["Cây thư mục giúp?",["Chơi game","Dễ tìm thông tin","Xem phim","Nghe nhạc"],1],
+["Cách sắp xếp thông tin?",["Ngẫu nhiên","Theo sơ đồ cây","Theo màu","Theo kích thước"],1],
+["Ổ đĩa thường có tên?",["A,B,C","C:, D:, E:","1,2,3","X,Y,Z"],1],
+["Để mở tệp cần?",["Nháy chuột","Tắt máy","Rút điện","Đóng máy"],0],
+["Tệp Tieng Viet 3 nằm ở?",["Ổ C","Ổ D","Ổ E","Ổ F"],1],
+
+["Các bước tìm tệp?",["Mở ổ → thư mục → tệp","Mở tệp trước","Tắt máy","Không cần"],0],
+["Số bước tìm tệp?",["2","3","4","5"],2],
+["Ổ đĩa chứa?",["Tệp và thư mục","Chỉ tệp","Chỉ thư mục","Không gì"],0],
+["Thư mục chứa?",["Thư mục con và tệp","Chỉ tệp","Chỉ thư mục","Không gì"],0],
+["Tạo thư mục bằng?",["New folder","Delete","Rename","Copy"],0],
+["Đổi tên thư mục?",["Rename","Delete","Open","Save"],0],
+["Xóa thư mục?",["Delete","Copy","Paste","Open"],0],
+["Sau khi tạo thư mục cần?",["Nhập tên","Xóa","Đóng máy","Restart"],0],
+["Phím xác nhận?",["Enter","Shift","Ctrl","Alt"],0],
+["Thư mục con là?",["Trong thư mục khác","Ổ đĩa","Tệp","Thiết bị"],0],
+
+["Cây thư mục giúp?",["Khó tìm","Dễ tìm","Không liên quan","Làm chậm"],1],
+["Ổ đĩa là thư mục?",["Sai","Đúng","Có thể","Không biết"],1],
+["Trong thư mục không thể?",["Chứa tệp","Chứa thư mục con","Chứa ổ đĩa","Chứa dữ liệu"],2],
+["Thư mục có thể?",["Trùng tên","Không trùng tên","Bắt buộc trùng","Không có tên"],1],
+["Tên thư mục?",["Tùy ý","Phải giống nhau","Không đặt được","Luôn số"],0],
+["File Explorer dùng để?",["Quản lý tệp","Chơi game","Xem phim","Nghe nhạc"],0],
+["Mở ổ đĩa bằng?",["Nháy chuột","Gõ phím","Hét","Vẽ"],0],
+["Ổ đĩa D: chứa?",["Thư mục","Tệp","Cả hai","Không gì"],2],
+["Thư mục mẹ chứa?",["Thư mục con","Ổ đĩa","Chuột","Bàn"],0],
+["Tệp không phải?",["Dữ liệu","Thư mục","File","Thông tin"],1],
+
+["Cây thư mục giống?",["Cây thật","Sơ đồ cây","Nhà","Xe"],1],
+["Sắp xếp thông tin giúp?",["Nhanh tìm","Chậm hơn","Khó hơn","Không đổi"],0],
+["Thư mục gốc chứa?",["Thư mục và tệp","Chỉ tệp","Chỉ thư mục","Không gì"],0],
+["Tìm tệp cần?",["Theo thứ tự","Ngẫu nhiên","Không cần","Đoán"],0],
+["Tạo thư mục ở đâu?",["Trong thư mục","Ngoài máy","Trên bàn","Trong sách"],0],
+["Đổi tên cần?",["Chọn thư mục","Xóa máy","Tắt máy","Rút điện"],0],
+["Xóa thư mục sẽ?",["Mất dữ liệu","Giữ nguyên","Tăng dữ liệu","Không đổi"],0],
+["Thư mục giúp?",["Lưu trữ","Chơi game","Nấu ăn","Nghe nhạc"],0],
+["Tệp là đơn vị?",["Lưu trữ","Chơi","Học","Viết"],0],
+["Máy tính lưu trữ bằng?",["Thư mục và tệp","Giấy","Sách","Bảng"],0]
+
 ];
 
 while(questions.length<70)questions.push(...questions.slice(0));
