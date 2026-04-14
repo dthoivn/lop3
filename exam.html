@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Kiểm tra Tin học - Lớp 3</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: linear-gradient(120deg, #a1c4fd, #c2e9fb);
+    text-align: center;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    margin: 20px auto;
+    width: 85%;
+    border-radius: 20px;
+    box-shadow: 0 0 15px gray;
+}
+
+h1 { color: #ff6f61; }
+
+.question {
+    text-align: left;
+    margin: 15px 0;
+    padding: 10px;
+    border-radius: 10px;
+    background: #f9f9f9;
+    transition: 0.3s;
+}
+
+.question:hover {
+    transform: scale(1.02);
+    background: #fff3cd;
+}
+
+button {
+    background: #28a745;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: orange;
+    transform: scale(1.1);
+}
+
+#timer {
+    color: red;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+ul {
+    text-align: left;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🌈 BÀI KIỂM TRA TIN HỌC 🌈</h1>
+
+<p id="timer">⏰ 35:00</p>
+
+<p>👦 Họ và tên: <input type="text" id="name"></p>
+
+<div id="quiz"></div>
+
+<hr>
+
+<h2>🛠 PHẦN THỰC HÀNH</h2>
+
+<p><b>Yêu cầu:</b> Tạo 1 bài trình chiếu giới thiệu "Ngôi trường của em"</p>
+
+<ul>
+<li>🔹 Bước 1: Mở phần mềm PowerPoint</li>
+<li>🔹 Bước 2: Tạo 2 slide</li>
+<li>🔹 Bước 3: Slide 1: Giới thiệu tên trường, lớp</li>
+<li>🔹 Bước 4: Slide 2: Mô tả trường (phòng học, sân trường)</li>
+<li>🔹 Bước 5: Chèn hình ảnh minh họa</li>
+<li>🔹 Bước 6: Chỉnh chữ rõ ràng, dễ nhìn</li>
+<li>🔹 Bước 7: Lưu file với tên: <b>TenEm_Lop3</b></li>
+</ul>
+
+<p>📁 Upload bài: <input type="file"></p>
+
+<br>
+<button onclick="submitQuiz()">🚀 Nộp bài</button>
+
+<p id="result"></p>
+
+</div>
+
+<script>
+
+// DANH SÁCH CÂU HỎI (KHÔNG TRÙNG)
+const questions = [
+{
+q: "Máy tính giúp em làm gì nhanh hơn?",
+a: ["A. Tính toán", "B. Ngủ", "C. Ăn cơm"],
+correct: "A"
+},
+{
+q: "Thiết bị nào dùng để nhập chữ?",
+a: ["A. Chuột", "B. Bàn phím", "C. Loa"],
+correct: "B"
+},
+{
+q: "Màn hình dùng để?",
+a: ["A. Hiển thị", "B. In giấy", "C. Lưu dữ liệu"],
+correct: "A"
+},
+{
+q: "Khi thấy thông tin lạ trên mạng, em nên?",
+a: ["A. Tin ngay", "B. Hỏi người lớn", "C. Chia sẻ"],
+correct: "B"
+},
+{
+q: "Để lưu bài, em cần?",
+a: ["A. Save", "B. Delete", "C. Exit"],
+correct: "A"
+},
+{
+q: "Loa dùng để?",
+a: ["A. Nghe âm thanh", "B. Viết chữ", "C. Chụp ảnh"],
+correct: "A"
+},
+{
+q: "Thiết bị nào giúp điều khiển con trỏ?",
+a: ["A. Chuột", "B. Bàn phím", "C. Màn hình"],
+correct: "A"
+}
+];
+
+// RANDOM CÂU HỎI
+function shuffle(array) {
+    return array.sort(() => Math.random() - 0.5);
+}
+
+let selectedQuestions = shuffle(questions).slice(0,5);
+
+let quizHTML = "";
+
+selectedQuestions.forEach((item, index) => {
+    quizHTML += `<div class="question">
+    <p>${index+1}. ${item.q}</p>`;
+    
+    item.a.forEach(opt => {
+        let val = opt.charAt(0);
+        quizHTML += `<input type="radio" name="q${index}" value="${val}"> ${opt}<br>`;
+    });
+
+    quizHTML += `</div>`;
+});
+
+document.getElementById("quiz").innerHTML = quizHTML;
+
+
+// CHẤM ĐIỂM
+function submitQuiz() {
+    let score = 0;
+
+    selectedQuestions.forEach((item, index) => {
+        let selected = document.querySelector(`input[name="q${index}"]:checked`);
+        if (selected && selected.value === item.correct) {
+            score++;
+        }
+    });
+
+    document.getElementById("result").innerHTML =
+        "🎉 Điểm trắc nghiệm: " + score + "/5";
+}
+
+
+// TIMER 35 PHÚT
+let time = 35 * 60;
+
+let timer = setInterval(() => {
+    let m = Math.floor(time/60);
+    let s = time % 60;
+
+    document.getElementById("timer").innerHTML =
+        `⏰ ${m}:${s<10?"0":""}${s}`;
+
+    time--;
+
+    if(time < 0){
+        clearInterval(timer);
+        alert("⏰ Hết giờ!");
+        submitQuiz();
+    }
+
+},1000);
+
+</script>
+
+</body>
+</html>
