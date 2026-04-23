@@ -2,62 +2,67 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Đề kiểm tra Tin học lớp 3</title>
+<title>Thi Tin học lớp 3</title>
 
 <style>
-    body {
-        font-family: 'Segoe UI', sans-serif;
-        margin: 0;
-        background: linear-gradient(135deg, #74ebd5, #9face6);
-    }
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
 
-    .container {
-        max-width: 900px;
-        margin: 40px auto;
-        background: white;
-        padding: 30px;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
 
-    h1, h2, h3 {
-        text-align: center;
-    }
+h1 {
+    text-align: center;
+}
 
-    .info {
-        margin-bottom: 20px;
-    }
+.question {
+    background: #f1f5ff;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    transition: 0.3s;
+}
 
-    .question {
-        background: #f8f9ff;
-        padding: 15px;
-        border-radius: 12px;
-        margin-bottom: 15px;
-    }
+.correct {
+    background: #d4edda !important;
+}
 
-    label {
-        display: block;
-        padding: 6px;
-        cursor: pointer;
-    }
+.wrong {
+    background: #f8d7da !important;
+}
 
-    button {
-        display: block;
-        margin: 20px auto;
-        padding: 12px 25px;
-        border: none;
-        border-radius: 10px;
-        background: #4facfe;
-        color: white;
-        cursor: pointer;
-    }
+label {
+    display: block;
+    padding: 6px;
+    cursor: pointer;
+}
 
-    #result {
-        text-align: center;
-        font-weight: bold;
-        margin-top: 20px;
-        color: green;
-    }
+button {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    background: #4facfe;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#result {
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+}
 </style>
 </head>
 
@@ -65,162 +70,214 @@
 
 <div class="container">
 
-<h2>TRƯỜNG TIỂU HỌC TRẦN THỊ NGỌC HÂN</h2>
+<h1>ĐỀ KIỂM TRA TIN HỌC LỚP 3</h1>
 
-<h1>ĐỀ KIỂM TRA CUỐI NĂM</h1>
-<h2>MÔN TIN HỌC – LỚP 3</h2>
+<p>Họ tên: <input type="text" id="hoten"></p>
 
-<div class="info">
-<p>Họ và tên: <input type="text" id="hoten"></p>
-<p>Lớp: <input type="text"></p>
-<p>Thời gian: 35 phút</p>
-</div>
+<form id="quizForm"></form>
 
-<h2>PHẦN I: TRẮC NGHIỆM</h2>
-
-<form id="quizForm">
-
-<div class="question">
-<p><b>Câu 1:</b> Ví dụ nào là thông tin gia đình?</p>
-<label><input type="radio" name="q1" value="A"> A. Địa chỉ, số điện thoại</label>
-<label><input type="radio" name="q1" value="B"> B. Dự báo thời tiết</label>
-<label><input type="radio" name="q1" value="C"> C. Kết quả bóng đá</label>
-</div>
-
-<div class="question">
-<p><b>Câu 2:</b> Biểu tượng của PowerPoint là?</p>
-<label><input type="radio" name="q2" value="A"> A
-<img src="https://i.postimg.cc/sGYsfb3w/cau2b.jpg" alt="cau2b">
-</label>
-<label><input type="radio" name="q2" value="B"> B
-<img src="https://i.postimg.cc/30XYrz31/cau2a.jpg" alt="cau2a">  
-</label>
-<label><input type="radio" name="q2" value="C"> C
-<img src="https://i.postimg.cc/wtM8dY5G/L3-2C.jpg" alt="L3-2C">
-</label>
-</div>
-
-<div class="question">
-<p><b>Câu 3:</b> Ngăn kéo giống cái gì trong máy tính?</p>
-<label><input type="radio" name="q3" value="A"> A. Màn hình</label>
-<label><input type="radio" name="q3" value="B"> B. Tệp tin</label>
-<label><input type="radio" name="q3" value="C"> C. Thư mục</label>
-</div>
-
-<div class="question">
-<p><b>Câu 4:</b> Công việc nào cần máy tính?</p>
-<label><input type="radio" name="q4" value="A"> A. Quan sát cây</label>
-<label><input type="radio" name="q4" value="B"> B. Kể chuyện</label>
-<label><input type="radio" name="q4" value="C"> C. Tìm thông tin Internet</label>
-</div>
-
-<div class="question">
-<p><b>Câu 5:</b> Tư thế cầm chuột đúng?</p>
-<label><input type="radio" name="q5" value="A"> A
-<img src="https://i.postimg.cc/GBtw1nP6/L3-5A.png" alt="L3-5A">
-</label>
-<label><input type="radio" name="q5" value="B"> B
-<img src="https://i.postimg.cc/XZqS06Km/L3-5B.png" alt="L3-5B">
-</label>
-<label><input type="radio" name="q5" value="C"> C
-<img src="https://i.postimg.cc/WDzLPcmK/L3-5C.png" alt="L3-5C">
-</label>
-</div>
-
-<div class="question">
-<p><b>Câu 6:</b> Chia sẻ thông tin cho người lạ?</p>
-<label><input type="radio" name="q6" value="A"> A. Không sao</label>
-<label><input type="radio" name="q6" value="B"> B. Có thể bị lừa</label>
-<label><input type="radio" name="q6" value="C"> C. Được giúp đỡ</label>
-</div>
-
-<div class="question">
-<p><b>Câu 7:</b> Hình mô tả hành động gì?</p>
-<img src='https://i.postimg.cc/1VPvspxb/L3-7.png' border='0' alt='L3-7'>
-<label><input type="radio" name="q7" value="A"> A. Rửa tay</label>
-<label><input type="radio" name="q7" value="B"> B. Tắm</label>
-<label><input type="radio" name="q7" value="C"> C. Uống nước</label>
-</div>
-
-<div class="question">
-<p><b>Câu 8:</b> Tắt máy đúng cách?</p>
-<label><input type="radio" name="q8" value="A"> A. Chọn Power, chọn nút lệnh Shutdown</label>
-<label><input type="radio" name="q8" value="B"> B. Chọn nút Start, chọn lệnh Power, chọn nút lệnh Shutdown, tắt nút nguồn màn hình máy tính.</label>
-<label><input type="radio" name="q8" value="C"> C. Chọn nút lệnh Start, chọn lệnh Power, chọn lệnh Shutdown</label>
-</div>    
-
-<div class="question">
-<p>
-    <p><b>Câu 9:</b> Đúng/Sai</p>
-        A. Thầy cô hỏi địa chỉ 
-        <input type="text" name="cauA">
-    </p>
-
-    <p>
-        B. Người lạ hỏi số điện thoại 
-        <input type="text" name="cauB">
-    </p>
-
-    <p>
-        C. Bạn hỏi bài 
-        <input type="text" name="cauC">
-    </p>
-</div>
-
-<button type="button" onclick="tinhDiem()">NỘP BÀI</button>
-
-</form>
+<button onclick="submitQuiz()">NỘP BÀI</button>
 
 <p id="result"></p>
-
-<h2>PHẦN II: THỰC HÀNH</h2>
-
-<h3>1. Tạo thư mục</h3>
-<ul>
-<li>Tạo thư mục ổ D hoặc C</li>
-<li>Đặt tên: Họ tên + Lớp</li>
-</ul>
-
-<h3>2. Tạo PowerPoint</h3>
-<img src='https://i.postimg.cc/yk6zTRJ5/L3-TH.jpg' border='0' alt='L3-TH'>
-<ul>
-<li>Slide 1: Giới thiệu bản thân</li>
-<li>Slide 2: Giới thiệu gia đình</li>
-<li>Font: Times New Roman</li>
-<li>Có hình ảnh minh họa</li>
-</ul>
-
-<h3>3. Lưu file</h3>
-<p>Lưu với tên: <b>Giới thiệu gia đình</b></p>
 
 </div>
 
 <script>
-function tinhDiem() {
-    let dapAn = {
-        q1: "A",
-        q2: "B",
-        q3: "C",
-        q4: "C",
-        q5: "B",
-        q6: "B",
-        q7: "A",
-        q8: "B"
-    };
+let submitted = false;
 
-    let diem = 0;
+const questions = [
+{
+q: "Ví dụ nào là thông tin gia đình?",
+name: "q1",
+a: [
+{t:"Địa chỉ, số điện thoại", v:"A"},
+{t:"Dự báo thời tiết", v:"B"},
+{t:"Kết quả bóng đá", v:"C"}
+],
+correct:"A"
+},
+{
+q: "Biểu tượng của PowerPoint là?",
+name: "q2",
+a: [
+{t:"A", img:"https://i.postimg.cc/sGYsfb3w/cau2b.jpg", v:"A"},
+{t:"B", img:"https://i.postimg.cc/30XYrz31/cau2a.jpg", v:"B"},
+{t:"C", img:"https://i.postimg.cc/wtM8dY5G/L3-2C.jpg", v:"C"}
+],
+correct:"B"
+},
+{
+q: "Ngăn kéo giống cái gì trong máy tính?",
+name: "q3",
+a: [
+{t:"Màn hình", v:"A"},
+{t:"Tệp tin", v:"B"},
+{t:"Thư mục", v:"C"}
+],
+correct:"C"
+},
+{
+q: "Công việc nào cần máy tính?",
+name: "q4",
+a: [
+{t:"Quan sát cây", v:"A"},
+{t:"Kể chuyện", v:"B"},
+{t:"Tìm thông tin Internet", v:"C"}
+],
+correct:"C"
+},
+{
+q: "Tư thế cầm chuột đúng?",
+name: "q5",
+a: [
+{img:"https://i.postimg.cc/GBtw1nP6/L3-5A.png", v:"A"},
+{img:"https://i.postimg.cc/XZqS06Km/L3-5B.png", v:"B"},
+{img:"https://i.postimg.cc/WDzLPcmK/L3-5C.png", v:"C"}
+],
+correct:"B"
+},
+{
+q: "Chia sẻ thông tin cho người lạ?",
+name: "q6",
+a: [
+{t:"Không sao", v:"A"},
+{t:"Có thể bị lừa", v:"B"},
+{t:"Được giúp đỡ", v:"C"}
+],
+correct:"B"
+},
+{
+q: "Hình mô tả hành động gì?",
+name: "q7",
+img:"https://i.postimg.cc/1VPvspxb/L3-7.png",
+a: [
+{t:"Rửa tay", v:"A"},
+{t:"Tắm", v:"B"},
+{t:"Uống nước", v:"C"}
+],
+correct:"A"
+},
+{
+q: "Tắt máy đúng cách?",
+name: "q8",
+a: [
+{t:"Chọn Power → Shutdown", v:"A"},
+{t:"Start → Power → Shutdown → tắt màn hình", v:"B"},
+{t:"Start → Power → Shutdown", v:"C"}
+],
+correct:"C"
+}
+];
 
-    for (let i = 1; i <= 8; i++) {
-        let selected = document.querySelector('input[name="q'+i+'"]:checked');
-        if (selected && selected.value === dapAn['q'+i]) {
-            diem++;
-        }
-    }
+// random câu hỏi + đáp án
+questions.sort(() => Math.random() - 0.5);
 
-    let ten = document.getElementById("hoten").value;
+const form = document.getElementById("quizForm");
 
-    document.getElementById("result").innerHTML =
-    ten + " đạt " + diem + "/8 điểm";
+questions.forEach((item, index) => {
+let div = document.createElement("div");
+div.className = "question";
+
+let html = `<b>Câu ${index+1}:</b> ${item.q}<br>`;
+
+if(item.img){
+html += `<img src="${item.img}" width="120"><br>`;
+}
+
+item.a.sort(() => Math.random() - 0.5);
+
+item.a.forEach(ans=>{
+html += `<label>
+<input type="radio" name="${item.name}" value="${ans.v}">
+${ans.t || ""}
+${ans.img ? `<br><img src="${ans.img}" width="100">` : ""}
+</label>`;
+});
+
+div.innerHTML = html;
+form.appendChild(div);
+});
+
+// câu 9
+form.innerHTML += `
+<div class="question" id="q9">
+<b>Câu 9:</b> Đúng/Sai<br>
+A. Thầy cô hỏi địa chỉ <input type="text" id="cauA"><br>
+B. Người lạ hỏi số điện thoại <input type="text" id="cauB"><br>
+C. Bạn hỏi bài <input type="text" id="cauC"><br>
+</div>
+`;
+
+function submitQuiz(){
+if(submitted){
+alert("Bạn đã nộp bài rồi!");
+return;
+}
+
+let name = document.getElementById("hoten").value;
+if(name === ""){
+alert("Nhập tên!");
+return;
+}
+
+let score = 0;
+
+// chấm trắc nghiệm
+for(let q of questions){
+let div = document.querySelector(`input[name="${q.name}"]`).closest(".question");
+let selected = document.querySelector(`input[name="${q.name}"]:checked`);
+
+if(!selected){
+alert("Bạn chưa làm hết câu!");
+return;
+}
+
+if(selected.value === q.correct){
+score++;
+div.classList.add("correct");
+}else{
+div.classList.add("wrong");
+
+let correctText = "";
+q.a.forEach(a=>{
+if(a.v === q.correct){
+correctText = a.t || "Đáp án hình";
+}
+});
+
+let show = document.createElement("div");
+show.innerHTML = "✔ Đáp án đúng: " + correctText;
+show.style.color = "green";
+div.appendChild(show);
+}
+}
+
+// câu 9
+let q9 = document.getElementById("q9");
+
+let a = document.getElementById("cauA").value.toLowerCase();
+let b = document.getElementById("cauB").value.toLowerCase();
+let c = document.getElementById("cauC").value.toLowerCase();
+
+let correctCount = 0;
+
+if(a === "đúng") correctCount++;
+if(b === "sai") correctCount++;
+if(c === "đúng") correctCount++;
+
+score += correctCount;
+
+if(correctCount === 3){
+q9.classList.add("correct");
+}else{
+q9.classList.add("wrong");
+q9.innerHTML += "<br><span style='color:green'>✔ Đáp án: A đúng, B sai, C đúng</span>";
+}
+
+submitted = true;
+
+document.getElementById("result").innerHTML =
+`🎯 ${name} đạt ${score}/11 điểm`;
 }
 </script>
 
