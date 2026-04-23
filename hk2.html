@@ -20,7 +20,7 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-h1 {
+h1, h2 {
     text-align: center;
 }
 
@@ -32,12 +32,8 @@ h1 {
     transition: 0.3s;
 }
 
-.correct {
-    background: #d4edda !important;
-}
-
-.wrong {
-    background: #f8d7da !important;
+.question:hover {
+    transform: scale(1.02);
 }
 
 label {
@@ -58,9 +54,14 @@ button {
     font-size: 16px;
 }
 
+button:hover {
+    background: #00c6ff;
+}
+
 #result {
     text-align: center;
     font-weight: bold;
+    margin-top: 20px;
     font-size: 18px;
 }
 </style>
@@ -169,9 +170,10 @@ correct:"C"
 }
 ];
 
-// random câu hỏi + đáp án
+// random câu hỏi
 questions.sort(() => Math.random() - 0.5);
 
+// render
 const form = document.getElementById("quizForm");
 
 questions.forEach((item, index) => {
@@ -184,12 +186,13 @@ if(item.img){
 html += `<img src="${item.img}" width="120"><br>`;
 }
 
+// random đáp án
 item.a.sort(() => Math.random() - 0.5);
 
 item.a.forEach(ans=>{
 html += `<label>
 <input type="radio" name="${item.name}" value="${ans.v}">
-${ans.t || ""}
+${ans.t ? ans.t : ""}
 ${ans.img ? `<br><img src="${ans.img}" width="100">` : ""}
 </label>`;
 });
@@ -200,7 +203,7 @@ form.appendChild(div);
 
 // câu 9
 form.innerHTML += `
-<div class="question" id="q9">
+<div class="question">
 <b>Câu 9:</b> Đúng/Sai<br>
 A. Thầy cô hỏi địa chỉ <input type="text" id="cauA"><br>
 B. Người lạ hỏi số điện thoại <input type="text" id="cauB"><br>
@@ -222,62 +225,25 @@ return;
 
 let score = 0;
 
-// chấm trắc nghiệm
+// kiểm tra hết chưa
 for(let q of questions){
-let div = document.querySelector(`input[name="${q.name}"]`).closest(".question");
 let selected = document.querySelector(`input[name="${q.name}"]:checked`);
-
 if(!selected){
 alert("Bạn chưa làm hết câu!");
 return;
 }
-
-if(selected.value === q.correct){
-score++;
-div.classList.add("correct");
-}else{
-div.classList.add("wrong");
-
-let correctText = "";
-q.a.forEach(a=>{
-if(a.v === q.correct){
-correctText = a.t || "Đáp án hình";
-}
-});
-
-let show = document.createElement("div");
-show.innerHTML = "✔ Đáp án đúng: " + correctText;
-show.style.color = "green";
-div.appendChild(show);
-}
+if(selected.value === q.correct) score++;
 }
 
 // câu 9
-let q9 = document.getElementById("q9");
-
-let a = document.getElementById("cauA").value.toLowerCase();
-let b = document.getElementById("cauB").value.toLowerCase();
-let c = document.getElementById("cauC").value.toLowerCase();
-
-let correctCount = 0;
-
-if(a === "đúng") correctCount++;
-if(b === "sai") correctCount++;
-if(c === "đúng") correctCount++;
-
-score += correctCount;
-
-if(correctCount === 3){
-q9.classList.add("correct");
-}else{
-q9.classList.add("wrong");
-q9.innerHTML += "<br><span style='color:green'>✔ Đáp án: A đúng, B sai, C đúng</span>";
-}
+if(document.getElementById("cauA").value.toLowerCase() === "đúng") score++;
+if(document.getElementById("cauB").value.toLowerCase() === "sai") score++;
+if(document.getElementById("cauC").value.toLowerCase() === "đúng") score++;
 
 submitted = true;
 
 document.getElementById("result").innerHTML =
-`🎯 ${name} đạt ${score}/11 điểm`;
+`🎉 ${name} đạt ${score}/11 điểm`;
 }
 </script>
 
