@@ -197,6 +197,7 @@
 
 <script>
 function tinhDiem() {
+
     let dapAn = {
         q1: "A",
         q2: "B",
@@ -211,16 +212,60 @@ function tinhDiem() {
     let diem = 0;
 
     for (let i = 1; i <= 8; i++) {
+
+        let options = document.querySelectorAll('input[name="q'+i+'"]');
         let selected = document.querySelector('input[name="q'+i+'"]:checked');
-        if (selected && selected.value === dapAn['q'+i]) {
+
+        if (!selected) {
+            alert("Chưa làm câu " + i);
+            return;
+        }
+
+        options.forEach(opt => {
+            let parent = opt.parentElement;
+
+            // reset màu
+            parent.style.background = "";
+
+            if (opt.value === dapAn['q'+i]) {
+                parent.style.background = "#c8f7c5"; // xanh đúng
+            }
+
+            if (opt.checked && opt.value !== dapAn['q'+i]) {
+                parent.style.background = "#f7c5c5"; // đỏ sai
+            }
+        });
+
+        if (selected.value === dapAn['q'+i]) {
             diem++;
         }
     }
 
+    // ===== XỬ LÝ CÂU 9 (ĐÚNG / SAI) =====
+    let cau9 = {
+        cauA: "Đúng",
+        cauB: "Sai",
+        cauC: "Đúng"
+    };
+
+    Object.keys(cau9).forEach(key => {
+        let input = document.querySelector('input[name="'+key+'"]');
+        let value = input.value.trim();
+
+        if (value === "") {
+            input.style.background = "#f7c5c5";
+        } else if (value.toLowerCase() === cau9[key].toLowerCase()) {
+            input.style.background = "#c8f7c5"; // đúng
+            diem += 0.5;
+        } else {
+            input.style.background = "#f7c5c5"; // sai
+        }
+    });
+
     let ten = document.getElementById("hoten").value;
 
     document.getElementById("result").innerHTML =
-    ten + " đạt " + diem + "/8 điểm";
+    ten + " đạt " + diem + "/9 điểm";
 }
 </script>
 
