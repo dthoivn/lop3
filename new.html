@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tin Học Lớp 3 - Học Tập Tương Tác</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f6f9;
+    line-height: 1.7;
+}
+
+header {
+    background: #2563eb;
+    color: white;
+    text-align: center;
+    padding: 25px;
+}
+
+nav {
+    background: #1d4ed8;
+    padding: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    background: #3b82f6;
+    padding: 10px 14px;
+    border-radius: 8px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+.lesson {
+    background: white;
+    margin-bottom: 30px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: #1e3a8a;
+}
+
+h3 {
+    color: #2563eb;
+}
+
+.step {
+    background: #eef4ff;
+    border-left: 5px solid #2563eb;
+    padding: 12px;
+    margin: 12px 0;
+    border-radius: 6px;
+}
+
+.practice {
+    background: #ecfdf5;
+    border-left: 5px solid #10b981;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 6px;
+}
+
+.quiz {
+    background: #fff7ed;
+    border-left: 5px solid #f97316;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 6px;
+}
+
+button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #1e40af;
+}
+
+.result {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+footer {
+    background: #1e3a8a;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>HƯỚNG DẪN GIẢNG DẠY TIN HỌC LỚP 3</h1>
+<p>Năm học 2026 - 2027</p>
+</header>
+
+<nav>
+<a href="#b1">Bài 1</a>
+<a href="#b2">Bài 2</a>
+<a href="#b3">Bài 3</a>
+<a href="#b4">Bài 4</a>
+<a href="#b5">Bài 5</a>
+<a href="#b6">Bài 6</a>
+<a href="#b7">Bài 7</a>
+<a href="#b8">Bài 8</a>
+<a href="#b9">Bài 9</a>
+</nav>
+
+<div class="container">
+
+<section class="lesson" id="b1">
+<h2>Bài 1. Máy Tính Quanh Em</h2>
+
+<h3>Mục tiêu</h3>
+<ul>
+<li>Nhận biết máy tính trong cuộc sống.</li>
+<li>Biết một số công việc dùng máy tính.</li>
+<li>Tạo hứng thú học Tin học.</li>
+</ul>
+
+<div class="step">
+<strong>Bước 1: Khởi động</strong>
+<ul>
+<li>Em đã thấy máy tính ở đâu?</li>
+<li>Máy tính dùng để làm gì?</li>
+</ul>
+</div>
+
+<div class="step">
+<strong>Bước 2: Giới thiệu bài học</strong>
+<ul>
+<li>Máy tính giúp học tập.</li>
+<li>Máy tính giúp xem tranh ảnh.</li>
+<li>Máy tính giúp nghe nhạc.</li>
+</ul>
+</div>
+
+<div class="step">
+<strong>Bước 3: Quan sát tranh</strong>
+<p>Cho học sinh xem tranh về hoạt động dùng máy tính.</p>
+</div>
+
+<div class="step">
+<strong>Bước 4: Thảo luận</strong>
+<p>Học sinh kể những việc muốn làm bằng máy tính.</p>
+</div>
+
+<div class="practice">
+<h3>Hoạt động thực hành</h3>
+<ul>
+<li>Tô màu tranh máy tính.</li>
+<li>Kể 2 việc máy tính giúp em.</li>
+<li>Thi kể nhanh công dụng máy tính.</li>
+</ul>
+</div>
+
+<div class="quiz">
+<h3>Trắc nghiệm</h3>
+<p>Máy tính giúp em làm gì?</p>
+<input type="radio" name="q1" value="a"> Học tập<br>
+<input type="radio" name="q1" value="b"> Tưới cây<br>
+<input type="radio" name="q1" value="c"> Nấu ăn<br>
+<button onclick="checkQ1()">Kiểm tra</button>
+<div class="result" id="result1"></div>
+</div>
+</section>
+
+<section class="lesson" id="b2">
+<h2>Bài 2. Các Bộ Phận Của Máy Tính</h2>
+
+<div class="step">
+<strong>Bước 1: Quan sát máy tính</strong>
+<ul>
+<li>Màn hình</li>
+<li>Chuột</li>
+<li>Bàn phím</li>
+<li>Thân máy</li>
+</ul>
+</div>
+
+<div class="step">
+<strong>Bước 2: Giải thích chức năng</strong>
+<ul>
+<li>Màn hình để xem.</li>
+<li>Chuột để điều khiển.</li>
+<li>Bàn phím để gõ chữ.</li>
+</ul>
+</div>
+
+<div class="step">
+<strong>Bước 3: Thực hành</strong>
+<p>Học sinh chỉ tên từng bộ phận.</p>
+</div>
+
+<div class="practice">
+<h3>Hoạt động thực hành</h3>
+<ul>
+<li>Nối tên với hình ảnh.</li>
+<li>Tô màu các bộ phận.</li>
+<li>Thi gọi tên nhanh.</li>
+</ul>
+</div>
+
+<div class="quiz">
+<h3>Trắc nghiệm</h3>
+<p>Bộ phận nào dùng để gõ chữ?</p>
+<input type="radio" name="q2" value="a"> Chuột<br>
+<input type="radio" name="q2" value="b"> Bàn phím<br>
+<input type="radio" name="q2" value="c"> Màn hình<br>
+<button onclick="checkQ2()">Kiểm tra</button>
+<div class="result" id="result2"></div>
+</div>
+</section>
+
+<section class="lesson" id="b3">
+<h2>Bài 3. Em Tập Dùng Chuột</h2>
+
+<div class="step">
+<strong>Bước 1: Hướng dẫn cầm chuột</strong>
+<ul>
+<li>Tay đặt nhẹ lên chuột.</li>
+<li>Ngón trỏ đặt vào nút trái.</li>
+</ul>
+</div>
+
+<div class="step">
+<strong>Bước 2: Giới thiệu thao tác</strong>
+<ul>
+<li>Nháy chuột.</li>
+<li>Nháy đúp.</li>
+<li>Kéo thả.</li>
+</ul>
+</div>
+
+<div class="step">
+<strong>Bước 3: Thực hành</strong>
+<p>Cho học sinh chơi trò chơi luyện chuột.</p>
+</div>
+
+<div class="practice">
+<h3>Hoạt động thực hành</h3>
+<ul>
+<li>Luyện kéo thả hình.</li>
+<li>Chơi trò chơi luyện chuột.</li>
+<li>Thi thao tác nhanh.</li>
+</ul>
+</div>
+</section>
+
+<section class="lesson" id="b4">
+<h2>Bài 4. Làm Quen Bàn Phím</h2>
+
+<div class="step">
+<strong>Bước 1: Quan sát bàn phím</strong>
+<ul>
+<li>Phím chữ.</li>
+<li>Phím số.</li>
+<li>Phím Space.</li>
+<li>Phím Enter.</li>
+</ul>
+</div>
+
+<div class="step">
+<strong>Bước 2: Hướng dẫn chức năng</strong>
+<ul>
+<li>Space tạo khoảng trắng.</li>
+<li>Enter xuống dòng.</li>
+</ul>
+</div>
+
+<div class="step">
+<strong>Bước 3: Thực hành</strong>
+<p>Cho học sinh tìm phím theo yêu cầu.</p>
+</div>
+
+<div class="quiz">
+<h3>Trắc nghiệm</h3>
+<p>Phím nào dùng để xuống dòng?</p>
+<input type="radio" name="q3" value="a"> Enter<br>
+<input type="radio" name="q3" value="b"> Space<br>
+<input type="radio" name="q3" value="c"> Shift<br>
+<button onclick="checkQ3()">Kiểm tra</button>
+<div class="result" id="result3"></div>
+</div>
+</section>
+
+<section class="lesson" id="b5">
+<h2>Bài 5. Tập Gõ Chữ Đơn Giản</h2>
+
+<div class="step">
+<strong>Bước 1: Giới thiệu tư thế ngồi</strong>
+<ul>
+<li>Ngồi thẳng.</li>
+<li>Mắt cách màn hình 50cm.</li>
+</ul>
+</div>
+
+<div class="step">
+<strong>Bước 2: Hướng dẫn đặt tay</strong>
+<p>Giáo viên hướng dẫn đặt tay nhẹ lên bàn phím.</p>
+</div>
+
+<div class="step">
+<strong>Bước 3: Thực hành gõ</strong>
+<ul>
+<li>Gõ họ tên.</li>
+<li>Gõ chữ cái.</li>
+<li>Gõ từ ngắn.</li>
+</ul>
+</div>
+
+<div class="practice">
+<h3>Hoạt động thực hành</h3>
+<ul>
+<li>Gõ họ tên.</li>
+<li>Gõ bảng chữ cái.</li>
+<li>Thi gõ chữ nhanh.</li>
+</ul>
+</div>
+</section>
+
+<section class="lesson" id="b6">
+<h2>Bài 6. Làm Quen Paint</h2>
+
+<div class="step">
+<strong>Bước 1:</strong> Mở phần mềm Paint
+</div>
+
+<div class="step">
+<strong>Bước 2:</strong> Giới thiệu công cụ
+<ul>
+<li>Bút vẽ</li>
+<li>Tô màu</li>
+<li>Cục tẩy</li>
+</ul>
+</div>
+
+<div class="step">
+<strong>Bước 3:</strong> Thực hành vẽ
+<ul>
+<li>Ông mặt trời</li>
+<li>Bông hoa</li>
+<li>Ngôi nhà</li>
+</ul>
+</div>
+
+<div class="practice">
+<h3>Hoạt động thực hành</h3>
+<ul>
+<li>Vẽ ngôi nhà mơ ước.</li>
+<li>Vẽ trường học của em.</li>
+</ul>
+</div>
+</section>
+
+<section class="lesson" id="b7">
+<h2>Bài 7. Vẽ Hình Bằng Shapes</h2>
+
+<div class="step">
+<strong>Bước 1:</strong> Giới thiệu Shapes
+<ul>
+<li>Hình tròn</li>
+<li>Hình vuông</li>
+<li>Hình tam giác</li>
+</ul>
+</div>
+
+<div class="step">
+<strong>Bước 2:</strong> Hướng dẫn vẽ hình
+</div>
+
+<div class="step">
+<strong>Bước 3:</strong> Ghép hình sáng tạo
+<ul>
+<li>Ngôi nhà</li>
+<li>Robot</li>
+<li>Cây xanh</li>
+</ul>
+</div>
+
+<div class="practice">
+<h3>Hoạt động thực hành</h3>
+<ul>
+<li>Vẽ phương tiện giao thông.</li>
+<li>Ghép hình sáng tạo.</li>
+</ul>
+</div>
+</section>
+
+<section class="lesson" id="b8">
+<h2>Bài 8. Em Làm Quen Internet</h2>
+
+<div class="step">
+<strong>Bước 1:</strong> Mở Google Chrome
+</div>
+
+<div class="step">
+<strong>Bước 2:</strong> Nhập từ khóa tìm kiếm
+</div>
+
+<div class="step">
+<strong>Bước 3:</strong> Xem hình ảnh phù hợp
+</div>
+
+<div class="step">
+<strong>Bước 4:</strong> Nhắc nhở an toàn Internet
+</div>
+
+<div class="quiz">
+<h3>Trắc nghiệm</h3>
+<p>Em có nên nhấn vào trang web lạ không?</p>
+<input type="radio" name="q4" value="a"> Có<br>
+<input type="radio" name="q4" value="b"> Không<br>
+<button onclick="checkQ4()">Kiểm tra</button>
+<div class="result" id="result4"></div>
+</div>
+</section>
+
+<section class="lesson" id="b9">
+<h2>Bài 9. Giữ An Toàn Khi Dùng Máy Tính</h2>
+
+<div class="practice">
+<h3>Hoạt động lớp</h3>
+<ul>
+<li>Thảo luận nhóm.</li>
+<li>Đóng vai xử lý tình huống.</li>
+<li>Nhận biết hành vi an toàn.</li>
+</ul>
+</div>
+
+<div class="quiz">
+<h3>Trắc nghiệm</h3>
+<p>Em có nên ăn uống gần máy tính không?</p>
+<input type="radio" name="q5" value="a"> Có<br>
+<input type="radio" name="q5" value="b"> Không<br>
+<button onclick="checkQ5()">Kiểm tra</button>
+<div class="result" id="result5"></div>
+</div>
+</section>
+
+</div>
+
+<footer>
+<p>Tài liệu tương tác Tin Học Lớp 3 - 2026 - 2027</p>
+</footer>
+
+<script>
+function checkQ1() {
+  const answer = document.querySelector('input[name="q1"]:checked');
+  const result = document.getElementById('result1');
+  if (!answer) {
+    result.innerHTML = 'Hãy chọn đáp án!';
+    return;
+  }
+  result.innerHTML = answer.value === 'a' ? '✅ Chính xác!' : '❌ Chưa đúng!';
+}
+
+function checkQ2() {
+  const answer = document.querySelector('input[name="q2"]:checked');
+  const result = document.getElementById('result2');
+  if (!answer) {
+    result.innerHTML = 'Hãy chọn đáp án!';
+    return;
+  }
+  result.innerHTML = answer.value === 'b' ? '✅ Chính xác!' : '❌ Chưa đúng!';
+}
+
+function checkQ3() {
+  const answer = document.querySelector('input[name="q3"]:checked');
+  const result = document.getElementById('result3');
+  if (!answer) {
+    result.innerHTML = 'Hãy chọn đáp án!';
+    return;
+  }
+  result.innerHTML = answer.value === 'a' ? '✅ Chính xác!' : '❌ Chưa đúng!';
+}
+
+function checkQ4() {
+  const answer = document.querySelector('input[name="q4"]:checked');
+  const result = document.getElementById('result4');
+  if (!answer) {
+    result.innerHTML = 'Hãy chọn đáp án!';
+    return;
+  }
+  result.innerHTML = answer.value === 'b' ? '✅ Chính xác!' : '❌ Không an toàn!';
+}
+
+function checkQ5() {
+  const answer = document.querySelector('input[name="q5"]:checked');
+  const result = document.getElementById('result5');
+  if (!answer) {
+    result.innerHTML = 'Hãy chọn đáp án!';
+    return;
+  }
+  result.innerHTML = answer.value === 'b' ? '✅ Chính xác!' : '❌ Không đúng!';
+}
+</script>
+
+</body>
+</html>
